@@ -1,0 +1,26 @@
+# === SECRETS — never commit or share ===
+_studio/.secrets.json
+**/_assets/youtube.json          # per-channel YouTube OAuth refresh token
+
+# === dependencies & build caches (reinstall locally) ===
+node_modules/
+_studio/render/.tmp/             # Remotion webpack bundles
+_studio/render/out/
+_studio/_tools/                  # platform-specific binaries (e.g. a Windows ffmpeg) — not portable
+_studio/.voicecache/             # cached TTS audio clips (regenerated on demand)
+_studio/render/.map-*.png        # dev map preview stills
+
+# === local-only state ===
+_studio/usage.json               # per-video spend ledger
+
+# === OS cruft ===
+.DS_Store
+Thumbs.db
+
+# Keep .secrets.example.json (the template) tracked — it has no real keys.
+!_studio/.secrets.example.json
+
+# NOTE: generated per-video assets (04-assets/, 05-edit/) are large. They're kept by default so a
+# video is self-contained, but if you share the repo you can exclude them by uncommenting:
+# **/04-assets/
+# **/05-edit/

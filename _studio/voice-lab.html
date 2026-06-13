@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>🎙 Voice Lab</title>
+<style>
+  :root{--bg:#faf9f7;--ink:#1a1a1a;--muted:#6b6b6b;--line:#e6e2dc;--card:#fff;--accent:#e07a3c;--ok:#2e7d52;--shadow:0 1px 2px rgba(0,0,0,.05),0 6px 18px rgba(0,0,0,.04)}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:ui-sans-serif,system-ui,"Segoe UI",Roboto,Arial,sans-serif;line-height:1.5}
+  header{position:sticky;top:0;z-index:20;background:rgba(250,249,247,.95);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);padding:12px 22px}
+  .brand{font-weight:800;font-size:18px}
+  a.back{color:var(--accent);text-decoration:none;font-weight:700;font-size:13px;margin-left:14px}
+  main{max-width:1060px;margin:0 auto;padding:20px}
+  .panel{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin-bottom:18px;box-shadow:var(--shadow)}
+  h2{font-size:16px;margin:0 0 10px}
+  .sub{color:var(--muted);font-size:13px;margin:0 0 12px;max-width:80ch}
+  textarea{width:100%;min-height:64px;border:1px solid var(--line);border-radius:10px;padding:10px;font:inherit;font-size:14px;background:#fcfbf9;resize:vertical}
+  .presets{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+  .presets button{border:1px solid var(--line);background:#fff;border-radius:999px;padding:5px 11px;font-size:12px;cursor:pointer;color:var(--muted)}
+  .ctrls{display:flex;gap:22px;flex-wrap:wrap;align-items:center;margin-top:12px}
+  .ctrl{display:flex;flex-direction:column;gap:3px;min-width:180px}
+  .ctrl label{font-size:11px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:var(--muted)}
+  .ctrl .val{font-weight:700;color:var(--accent)}
+  select{padding:7px 10px;border:1px solid var(--line);border-radius:8px;background:#fff;font:inherit}
+  input[type=range]{width:200px;accent-color:var(--accent)}
+  .player{position:sticky;top:54px;z-index:15;background:#fff;border:1px solid var(--line);border-radius:12px;padding:10px 14px;margin-bottom:18px;box-shadow:var(--shadow);display:flex;align-items:center;gap:12px}
+  .player audio{flex:1;height:38px}
+  .player .now{font-size:13px;font-weight:700;color:var(--muted);white-space:nowrap;max-width:40%;overflow:hidden;text-overflow:ellipsis}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:12px}
+  .vcard{border:1px solid var(--line);border-radius:12px;padding:12px 13px;background:#fff;box-shadow:var(--shadow)}
+  .vcard.cur{border-color:var(--accent);box-shadow:0 0 0 2px rgba(224,122,60,.16),var(--shadow)}
+  .vname{font-weight:800;font-size:15px}
+  .vtraits{font-size:12px;color:var(--muted);margin:2px 0 9px;min-height:16px}
+  .vbtns{display:flex;gap:6px;flex-wrap:wrap}
+  .btn{border:1px solid var(--line);background:#fff;border-radius:8px;padding:6px 10px;font-weight:700;font-size:12.5px;cursor:pointer}
+  .btn:hover{border-color:#cfcac2}
+  .btn.accent{background:var(--accent);border-color:var(--accent);color:#fff}
+  .btn.use.cur{background:var(--ok);border-color:var(--ok);color:#fff}
+  .libbar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:12px}
+  .libbar input[type=text]{flex:1;min-width:180px;border:1px solid var(--line);border-radius:8px;padding:8px 10px;font:inherit}
+  .hint{font-size:12.5px;color:var(--muted);margin-top:8px}
+  .hint b{color:var(--ink)}
+  .toast{position:fixed;top:14px;left:50%;transform:translateX(-50%);z-index:60;background:#1a1a1a;color:#fff;padding:10px 16px;border-radius:10px;font-weight:600;font-size:13px;display:none}
+  .toast.show{display:block}
+  .loading{color:var(--muted);font-size:13px;padding:8px}
+</style>
+</head>
+<body>
+<header><span class="brand">🎙 Voice Lab</span><a class="back" href="/">← back to Studio</a></header>
+<main>
+  <div class="panel">
+    <h2>Test line</h2>
+    <p class="sub">Type what you want the voices to read, set the expressiveness, then hit <b>🎙 My line</b> on any voice. <b>▶ Sample</b> plays the voice's free official demo. <b>Owen was run flat (style 0) — that's why he felt monotone.</b> A little style (~0.3) adds natural inflection without going theatrical.</p>
+    <textarea id="line">Sixty-five thousand years ago, someone pushed off from a beach, paddled past the last island they could see, and kept going — straight out into open ocean.</textarea>
+    <div class="presets" id="presets"></div>
+    <div class="ctrls">
+      <div class="ctrl"><label>Model</label>
+        <select id="model">
+          <option value="eleven_multilingual_v2">Multilingual v2 (best quality)</option>
+          <option value="eleven_turbo_v2_5">Turbo v2.5 (½ credits)</option>
+          <option value="eleven_v3">v3 (most expressive, less predictable)</option>
+        </select>
+      </div>
+      <div class="ctrl"><label>Stability <span class="val" id="stabV"></span></label><input type="range" id="stab" min="0" max="1" step="0.05"><span class="hint">lower = more variation/emotion</span></div>
+      <div class="ctrl"><label>Expressiveness (style) <span class="val" id="styleV"></span></label><input type="range" id="style" min="0" max="1" step="0.05"><span class="hint">~0.25–0.40 = a touch lively</span></div>
+    </div>
+  </div>
+
+  <div class="player"><span class="now" id="now">nothing playing</span><audio id="audio" controls></audio></div>
+
+  <div class="panel">
+    <h2>Your account voices</h2>
+    <div id="account" class="grid"><div class="loading">loading…</div></div>
+  </div>
+
+  <div class="panel">
+    <h2>Browse the ElevenLabs library</h2>
+    <div class="libbar">
+      <input type="text" id="q" placeholder="search a name or trait (e.g. James, Yearham, calm, documentary)…" />
+      <select id="gender"><option value="">any gender</option><option value="male" selected>male</option><option value="female">female</option></select>
+      <select id="age"><option value="">any age</option><option value="young">young</option><option value="middle_aged">middle-aged</option><option value="old">old</option></select>
+      <select id="use"><option value="">any use</option><option value="narrative_story" selected>narration</option><option value="informative_educational">educational</option><option value="conversational">conversational</option></select>
+      <button class="btn accent" id="search">Search</button>
+    </div>
+    <p class="hint">Warm, natural narrators worth auditioning for this channel (search the name): <b>James</b> (deep British, documentary gravitas), <b>Yearham</b> (epic/historical), <b>Eric</b>, <b>Cassidy</b>, <b>Aaron</b>. Sorted by popularity.</p>
+    <div id="library" class="grid"><div class="loading">searching…</div></div>
+  </div>
+</main>
+<div class="toast" id="toast"></div>
+
+<script>
+const el=(t,a={},...k)=>{const e=document.createElement(t);for(const[p,v]of Object.entries(a)){if(p==='class')e.className=v;else if(p==='html')e.innerHTML=v;else if(p.startsWith('on'))e.addEventListener(p.slice(2),v);else e.setAttribute(p,v);}for(const c of k)e.append(c?.nodeType?c:document.createTextNode(c??''));return e;};
+const audio=document.getElementById('audio'), now=document.getElementById('now');
+const lineEl=document.getElementById('line'), modelEl=document.getElementById('model');
+const stabEl=document.getElementById('stab'), styleEl=document.getElementById('style');
+const stabV=document.getElementById('stabV'), styleV=document.getElementById('styleV');
+let current='';
+function toast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2600);}
+function syncVals(){stabV.textContent=(+stabEl.value).toFixed(2);styleV.textContent=(+styleEl.value).toFixed(2);}
+stabEl.oninput=syncVals;styleEl.oninput=syncVals;
+[['Hook (open ocean)','Sixty-five thousand years ago, someone pushed off from a beach, paddled past the last island they could see, and kept going — straight out into open ocean.'],
+ ['Debunk (Zed)','And the skeptics pounced — for good reason. So a separate team went back and tested it a completely different way. Same answer.'],
+ ['Payoff','We didn’t adapt to the world. We carried our world with us. That’s the whole trick.']].forEach(([lbl,txt])=>{
+  document.getElementById('presets').append(el('button',{onclick:()=>{lineEl.value=txt;}},lbl));
+});
+function playSample(url,name){ if(!url){toast('no sample for this voice');return;} now.textContent='▶ sample · '+name; audio.src=url; audio.play().catch(()=>{}); }
+function playMine(voiceId,name){
+  const txt=lineEl.value.trim(); if(!txt){toast('type a test line first');return;}
+  const u='/api/voice-preview?voiceId='+encodeURIComponent(voiceId)+'&text='+encodeURIComponent(txt)+'&model='+encodeURIComponent(modelEl.value)+'&stability='+stabEl.value+'&style='+styleEl.value;
+  now.textContent='🎙 your line · '+name+' (generating…)'; audio.src=u; audio.play().then(()=>{now.textContent='🎙 your line · '+name;}).catch(()=>{now.textContent='⚠ could not generate — check key/quota';});
+}
+async function useVoice(voiceId,name,btn){
+  try{ const j=await (await fetch('/api/set-voice',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({voiceId,stability:+stabEl.value,style:+styleEl.value})})).json();
+    if(j.ok){current=voiceId;toast('✓ "'+name+'" set as the channel voice (style '+(+styleEl.value).toFixed(2)+')');markCurrent();}
+    else toast('⚠ '+(j.error||'could not set'));
+  }catch(e){toast('⚠ '+e);}
+}
+function markCurrent(){document.querySelectorAll('.vcard').forEach(c=>{const cur=c.dataset.vid===current;c.classList.toggle('cur',cur);const u=c.querySelector('.use');if(u){u.classList.toggle('cur',cur);u.textContent=cur?'✓ Channel voice':'✓ Use this voice';}});}
+function card(v){
+  const traits=[v.descriptive,v.gender,v.age&&v.age.replace('_',' '),v.accent,(v.use_case||'').replace(/_/g,' ')].filter(Boolean).join(' · ')+(v.clones?(' · '+v.clones.toLocaleString()+' uses'):'');
+  const labelTraits=v.labels?[v.labels.descriptive,v.labels.gender,v.labels.age&&v.labels.age.replace('_',' '),v.labels.accent,(v.labels.use_case||'').replace(/_/g,' ')].filter(Boolean).join(' · '):'';
+  const c=el('div',{class:'vcard'}); c.dataset.vid=v.voice_id;
+  c.append(el('div',{class:'vname'},v.name||'(unnamed)'));
+  c.append(el('div',{class:'vtraits'},traits.trim()||labelTraits||''));
+  const b=el('div',{class:'vbtns'});
+  b.append(el('button',{class:'btn',onclick:()=>playSample(v.preview_url,v.name)},'▶ Sample'));
+  b.append(el('button',{class:'btn accent',onclick:()=>playMine(v.voice_id,v.name)},'🎙 My line'));
+  b.append(el('button',{class:'btn use',onclick:(e)=>useVoice(v.voice_id,v.name,e.target)},'✓ Use this voice'));
+  c.append(b); return c;
+}
+async function loadAccount(){
+  const box=document.getElementById('account');
+  try{ const j=await (await fetch('/api/voice-list')).json();
+    current=j.current||current; box.innerHTML='';
+    if(j.error){box.append(el('div',{class:'loading'},j.error));return;}
+    if(!j.voices.length){box.append(el('div',{class:'loading'},'no voices on the account'));return;}
+    j.voices.forEach(v=>box.append(card(v))); markCurrent();
+  }catch(e){box.innerHTML='';box.append(el('div',{class:'loading'},'error: '+e));}
+}
+async function searchLib(){
+  const box=document.getElementById('library'); box.innerHTML='<div class="loading">searching…</div>';
+  const p=new URLSearchParams();
+  if(document.getElementById('q').value.trim())p.set('search',document.getElementById('q').value.trim());
+  if(document.getElementById('gender').value)p.set('gender',document.getElementById('gender').value);
+  if(document.getElementById('age').value)p.set('age',document.getElementById('age').value);
+  if(document.getElementById('use').value)p.set('use_case',document.getElementById('use').value);
+  try{ const j=await (await fetch('/api/shared-voices?'+p.toString())).json();
+    box.innerHTML=''; const vs=(j.voices||[]).sort((a,b)=>(b.clones||0)-(a.clones||0));
+    if(!vs.length){box.append(el('div',{class:'loading'},'no matches — try a different search'));return;}
+    vs.forEach(v=>box.append(card(v))); markCurrent();
+  }catch(e){box.innerHTML='';box.append(el('div',{class:'loading'},'error: '+e));}
+}
+document.getElementById('search').onclick=searchLib;
+document.getElementById('q').addEventListener('keydown',e=>{if(e.key==='Enter')searchLib();});
+async function boot(){
+  try{ const v=await (await fetch('/api/voice-status')).json();
+    stabEl.value=(v.stability!=null?v.stability:0.45); styleEl.value=(v.style!=null?v.style:0.30); current=v.voiceId||'';
+    if(v.model)modelEl.value=v.model;
+  }catch(_){ stabEl.value=0.45; styleEl.value=0.30; }
+  syncVals(); loadAccount(); searchLib();
+}
+boot();
+</script>
+</body>
+</html>

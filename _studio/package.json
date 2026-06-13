@@ -1,0 +1,9 @@
+{
+  "name": "youtube-studio",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Local interactive Studio for validating videos as they're built.",
+  "scripts": {
+    "start": "node server.js"
+  }
+}

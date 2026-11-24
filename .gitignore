@@ -24,3 +24,12 @@ Thumbs.db
 # video is self-contained, but if you share the repo you can exclude them by uncommenting:
 # **/04-assets/
 # **/05-edit/
+
+# === more local-only state (added 2026-11 refresh) ===
+_studio/usage-events.jsonl       # append-only spend ledger
+_studio/.style-scan-logs/
+_studio/*.log
+_studio/server.out
+_studio/server.err
+_test-channel/                   # scratch folder the integration tests create and remove
+**/_analytics/cache/

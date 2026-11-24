@@ -2,6 +2,8 @@ import { AbsoluteFill } from 'remotion';
 import { geoNaturalEarth1, geoPath, geoGraticule10 } from 'd3-geo';
 import { feature } from 'topojson-client';
 import landTopo from 'world-atlas/land-110m.json';
+import { coordOf } from './gazetteer.mjs';
+import { WarMapStill } from './warmap/WarMap.jsx';
 
 const W = 1920, H = 1080;
 const land = feature(landTopo, landTopo.objects.land);   // coastline only — no political borders
@@ -85,11 +87,20 @@ const LABEL_STYLES = {
   minimal: { fill: '#26312a', family: 'sans-serif', weight: '500', ls: 9, filter: 'lblGlow', opacity: 0.85, plate: '#fbf6ec', plateOp: 0.4, dot: '#3c4a40' },
 };
 
-export const MapStill = ({ rotateLng = 0, focus = [[0, 0]], routes = [], arcs = [], labels = [], padding = 165, hand = false, wobble = 14, labelStyle = 'serif', progress = 1 }) => {
+export const MapStill = ({ rotateLng = 0, focus = [[0, 0]], routes = [], arcs = [], labels = [], markers = [], blobs = [], padding = 165, hand = false, wobble = 14, labelStyle = 'serif', progress = 1,
+  theme = 'atlas', zoom = 'strategic', sides = {}, territory = [], fronts = [], pockets = [], units = [], arrows = [], counters = [], strengthBars = [], title = '', date = '', phase = '', legend = false }) => {
+  // War-map mode lives in warmap/WarMap.jsx; the legacy atlas path below is unchanged.
+  if (theme === 'war') return WarMapStill({ focus, zoom, sides, territory, fronts, pockets, units, arrows, counters, strengthBars, title, date, phase, legend, labels, padding, progress });
+  const focusPts = focus.map(coordOf).filter(Boolean);
   const proj = geoNaturalEarth1().rotate([rotateLng, 0]);
-  proj.fitExtent([[padding, padding], [W - padding, H - padding]], { type: 'MultiPoint', coordinates: focus });
+  proj.fitExtent([[padding, padding], [W - padding, H - padding]], { type: 'MultiPoint', coordinates: focusPts.length ? focusPts : [[0, 0]] });
   const path = geoPath(proj);
-  const allRoutes = [...routes, ...arcs.map((a) => [a.from, a.to])];
+  // routes/arcs/labels/markers may use real coords OR gazetteer place names — resolve everything here.
+  const allRoutes = [...routes.map((wp) => wp.map(coordOf).filter(Boolean)), ...arcs.map((a) => [coordOf(a.from), coordOf(a.to)].filter(Boolean))];
+  const labelItems = [
+    ...labels.map((l) => ({ ...l, coord: coordOf(l.coord != null ? l.coord : l) })),
+    ...markers.map((m) => ({ text: m.label || m.text || '', coord: coordOf(m.coord != null ? m.coord : (m.place != null ? { place: m.place } : m)), size: m.size || 34, marker: true, dotColor: m.color })),
+  ].filter((l) => l.coord);
   // Route draws from 12%..82% of the beat; the land/sea are always fully there.
   const drawP = progress >= 1 ? 1 : clamp01((progress - 0.12) / 0.7);
   // Lay the labels out ONCE (independent of progress): avoid each other, the route markers, and the
@@ -102,7 +113,7 @@ export const MapStill = ({ rotateLng = 0, focus = [[0, 0]], routes = [], arcs = 
     obstacles.push(ptBox(pts[0], 26), ptBox(pts[pts.length - 1], 42));
   }
   const LS = (LABEL_STYLES[labelStyle] || LABEL_STYLES.modern).ls;
-  const placements = placeLabels(labels, proj, LS, obstacles, SAFE);
+  const placements = placeLabels(labelItems, proj, LS, obstacles, SAFE);
   return (
     <AbsoluteFill style={{ backgroundColor: '#9cc3d8' }}>
       <svg width={W} height={H} viewBox={`0 0 ${W} ${H}`}>
@@ -138,6 +149,13 @@ export const MapStill = ({ rotateLng = 0, focus = [[0, 0]], routes = [], arcs = 
             <path d={path(land)} fill="#aac487" stroke="#586c3a" strokeWidth={hand ? 2.4 : 1.7} strokeLinejoin="round" />
           </g>
         </g>
+
+        {/* region shading (e.g. a species range) — translucent blobs at REAL coordinates */}
+        {blobs.map((b, i) => {
+          const p = proj(coordOf(b.coord != null ? b.coord : (b.place != null ? { place: b.place } : b))); if (!p) return null;
+          const on = progress >= 1 ? 1 : clamp01((progress - 0.1) / 0.5);
+          return <ellipse key={'bl' + i} cx={p[0].toFixed(1)} cy={p[1].toFixed(1)} rx={b.rx || 130} ry={b.ry || 95} fill={b.fill || '#7a4a2a'} fillOpacity={(b.opacity != null ? b.opacity : 0.34) * on} />;
+        })}
 
         {allRoutes.map((wp, i) => {
           const pts = wp.map((c) => proj(c)).filter(Boolean);
@@ -182,11 +200,11 @@ export const MapStill = ({ rotateLng = 0, focus = [[0, 0]], routes = [], arcs = 
                 <line x1={anchor[0].toFixed(1)} y1={anchor[1].toFixed(1)} x2={cx.toFixed(1)} y2={cy.toFixed(1)} stroke={s.dot} strokeWidth="2" strokeOpacity="0.55" />
               ) : null}
               {/* soft legibility plate sized to the label — de-collision guarantees plates don't overlap */}
-              <rect x={(cx - w / 2).toFixed(1)} y={(cy - h / 2).toFixed(1)} width={w.toFixed(1)} height={h.toFixed(1)} rx={(h * 0.34).toFixed(1)} fill={s.plate} fillOpacity={s.plateOp} />
-              {isMarker ? <circle cx={anchor[0].toFixed(1)} cy={anchor[1].toFixed(1)} r="7" fill={s.dot} stroke="#fff7ec" strokeWidth="2.5" /> : null}
-              <text x={cx.toFixed(1)} y={cy.toFixed(1)} textAnchor="middle" dominantBaseline="central" fontFamily={s.family}
+              {l.text ? <rect x={(cx - w / 2).toFixed(1)} y={(cy - h / 2).toFixed(1)} width={w.toFixed(1)} height={h.toFixed(1)} rx={(h * 0.34).toFixed(1)} fill={s.plate} fillOpacity={s.plateOp} /> : null}
+              {isMarker ? <circle cx={anchor[0].toFixed(1)} cy={anchor[1].toFixed(1)} r="7" fill={l.dotColor || s.dot} stroke="#fff7ec" strokeWidth="2.5" /> : null}
+              {l.text ? <text x={cx.toFixed(1)} y={cy.toFixed(1)} textAnchor="middle" dominantBaseline="central" fontFamily={s.family}
                 fontSize={l.size || 44} fontWeight={s.weight} letterSpacing={s.ls} fill={s.fill} fillOpacity={s.opacity}
-                filter={`url(#${s.filter})`}>{l.text}</text>
+                filter={`url(#${s.filter})`}>{l.text}</text> : null}
             </g>
           );
         })}

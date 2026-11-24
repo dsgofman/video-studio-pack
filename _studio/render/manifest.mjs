@@ -1,6 +1,8 @@
 // Pure: turn a studio.json doc into the inputProps the Remotion composition renders.
 // Paths are made relative to the video's 04-assets/ folder (the Remotion publicDir).
+import { resolveCues } from './cues.mjs';
 const FPS = 30, WIDTH = 1920, HEIGHT = 1080;
+const AMBIENT_KINDS = new Set(['embers', 'spores', 'pollen', 'dust', 'snow', 'rain']);   // opt-in particle overlays
 
 function rel(p) { return String(p || '').replace(/^.*04-assets[\/\\]/, ''); }
 function estSeconds(t) {
@@ -24,16 +26,26 @@ export function buildManifest(doc, opts = {}) {
       ? { text: (s.onScreenText || '').trim(), pos: s.textPos || 'top-center', anim: s.textAnim || 'punch' }
       : null;
     const map = (s.kind === 'map' && s.map && Array.isArray(s.map.focus)) ? s.map : null;
-    if (!images.length && !audio && !map) { skipped++; continue; }   // nothing to show
+    const infographic = (s.infographic && s.infographic.type) ? s.infographic : null;   // deterministic diagram
+    const realPhoto = (s.realPhoto && s.realPhoto.src) ? { src: rel(s.realPhoto.src), label: s.realPhoto.label || '', video: !!s.realPhoto.video } : null;   // real Pexels artifact plate (photo OR video)
+    const motionClip = (s.motionClip && s.motionClip.src) ? { src: rel(s.motionClip.src) } : null;   // Veo image→video (animated beat)
+    if (!images.length && !audio && !map && !infographic && !realPhoto && !motionClip) { skipped++; continue; }   // nothing to show
     const secs = Math.max(1.2, s.audioSeconds || s.seconds || estSeconds(s.narration));
+    const beatFrames = Math.max(1, Math.round(secs * FPS));
+    const cues = resolveCues(s.cues || [], s.wordTimings || [], secs, FPS, beatFrames);
     beats.push({
       n: s.n,
       images,
       audio,
       map,                                                  // accurate-map beats animate live (route draw-on)
-      durationInFrames: Math.max(1, Math.round(secs * FPS)),
+      infographic,                                          // deterministic timeline/chart (rendered from data)
+      durationInFrames: beatFrames,
       motion: s.motion || (s.kind === 'infographic' ? 'static' : 'push-in'),
-      caption,
+      ambientFx: AMBIENT_KINDS.has(s.ambientFx) ? s.ambientFx : null,   // opt-in drifting particle layer
+      realPhoto,                                                        // real Pexels artifact (renders as a field-guide plate)
+      motionClip,                                                       // Veo animated clip (renders as a video beat)
+      caption,    // legacy single caption (used only when cues is empty)
+      cues,       // resolved transient cues (preferred)
     });
   }
   const totalFrames = beats.reduce((a, b) => a + b.durationInFrames, 0);

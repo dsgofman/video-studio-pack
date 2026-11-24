@@ -20,5 +20,26 @@ in **[SETUP.md](SETUP.md)** (about 5 minutes). The short version:
 4. `cd _studio && npm start` → open **http://localhost:4317**
 5. Check your config anytime: `node _studio/setup.mjs`
 
-**No API keys, channels, or dependencies are bundled — you add your own.** See `SETUP.md` for how to get
-each key and how to start your own channel.
+**No API keys or dependencies are bundled — you add your own.** See `SETUP.md` for how to get each key.
+
+## What's in the box
+
+| Path | What it is |
+|---|---|
+| `CLAUDE.md` | The operating manual Claude follows: monetization rules, the 13-step pipeline, production standards |
+| `_studio/` | The Studio app (plain Node, no deps) + `render/` (Remotion auto-assembler: maps, infographics, captions, end card) |
+| `_templates/` | The per-video folder skeleton and the new-channel blueprint |
+| `MyChannel/` | A blank channel, ready to fill in. Rename it to your channel's name |
+
+## Make it yours (first hour)
+
+1. **Rename `MyChannel/`** to your channel and fill in its `channel.md`: niche, audience, voice, title
+   formulas. Ask Claude to run the viability research the blueprint describes first.
+2. **Fill in `MyChannel/_assets/style-bible.md`**: your art style, palette and cast. Until you make a
+   cast sheet, the Studio uses a built-in cast of four stick figures.
+3. **Edit `MyChannel/_assets/brand/brand.json`**: your @handle, end-card line, and default description
+   blurb, hashtags and tags for uploads.
+4. Drop a music bed at `MyChannel/_assets/music/bed.mp3` (YouTube Audio Library is free and safe).
+5. In the Studio: **＋ New project** → work Idea → Packaging → Script → Scenes → QC.
+
+Tests: `node _studio/test/<name>.test.js` (each file runs on its own).

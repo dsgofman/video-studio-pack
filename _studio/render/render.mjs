@@ -115,16 +115,17 @@ function brandAssets() {
     if (!fs.existsSync(src)) continue;
     try { fs.mkdirSync(dstDir, { recursive: true }); fs.copyFileSync(src, path.join(dstDir, file)); out[key] = 'brand/' + file; } catch (_) {}
   }
+  try { Object.assign(out, JSON.parse(fs.readFileSync(path.join(srcDir, 'brand.json'), 'utf8'))); } catch (_) {}   // tagline/handle/promise
   return out;
 }
 
 // Pick a REAL, already-produced sibling video to feature as "watch next" — NEVER invent one. Only
 // videos with a rough cut (or an upload) and a locked title qualify; most-recently-updated wins. Its
 // thumbnail (if any) is staged into this video's public dir so the end-card frame shows the real art.
-function pickWatchNext() {
+function pickWatchNext(limit = 2) {
   const chDir = path.join(ROOT, channel);
-  let dirs = []; try { dirs = fs.readdirSync(chDir, { withFileTypes: true }); } catch (_) { return null; }
-  let best = null;
+  let dirs = []; try { dirs = fs.readdirSync(chDir, { withFileTypes: true }); } catch (_) { return []; }
+  const cands = [];
   for (const d of dirs) {
     if (!d.isDirectory() || d.name.startsWith('_') || d.name === id) continue;
     const sp = path.join(chDir, d.name, 'studio.json');
@@ -137,20 +138,23 @@ function pickWatchNext() {
     const t = ((pk.candidates || {}).titles || []).find((x) => x.id === (pk.decision || {}).primaryTitle);
     const title = (t && t.text) || doc.workingTitle;
     if (!title) continue;
-    const when = String(doc.updatedAt || '');
-    if (!best || when > best.when) best = { title, id: d.name, when, thumbAbs: path.join(chDir, d.name, '00-packaging', 'thumbnails', 'final-1.png') };
+    cands.push({ title, id: d.name, when: String(doc.updatedAt || ''), thumbAbs: path.join(chDir, d.name, '00-packaging', 'thumbnails', 'final-1.png') });
   }
-  if (!best) return null;
-  const wn = { title: best.title, id: best.id };
-  try {
-    if (fs.existsSync(best.thumbAbs)) {
-      const dst = path.join(videoDir, '04-assets', 'brand', 'watchnext.png');
-      fs.mkdirSync(path.dirname(dst), { recursive: true });
-      fs.copyFileSync(best.thumbAbs, dst);
-      wn.thumb = 'brand/watchnext.png';
-    }
-  } catch (_) {}
-  return wn;
+  cands.sort((a, b) => b.when.localeCompare(a.when));                      // newest first
+  const out = [];
+  cands.slice(0, limit).forEach((c, i) => {
+    const wn = { title: c.title, id: c.id };
+    try {
+      if (fs.existsSync(c.thumbAbs)) {
+        const dst = path.join(videoDir, '04-assets', 'brand', 'watchnext-' + (i + 1) + '.png');
+        fs.mkdirSync(path.dirname(dst), { recursive: true });
+        fs.copyFileSync(c.thumbAbs, dst);
+        wn.thumb = 'brand/watchnext-' + (i + 1) + '.png';
+      }
+    } catch (_) {}
+    out.push(wn);
+  });
+  return out;
 }
 
 async function main() {
@@ -159,23 +163,28 @@ async function main() {
   const doc = JSON.parse(fs.readFileSync(sp, 'utf8'));
   const props = buildManifest(doc, {});   // ALWAYS build the full timeline
   if (!props.beats.length) throw new Error('Nothing to assemble — no beats have an image or narration yet.');
+  // Caption look: per-channel style chosen in the Studio (font/color/size/case/treatment). Default = handwriting.
+  try { props.captionStyle = JSON.parse(fs.readFileSync(path.join(ROOT, channel, '_assets', 'caption-style.json'), 'utf8')); } catch (_) {}
+  if (doc.captionStyle) props.captionStyle = Object.assign({}, props.captionStyle, doc.captionStyle);   // optional per-video override
   const musicSrc = findMusic();
   if (musicSrc) props.music = { src: musicSrc };
   console.log('music bed:', musicSrc || '(none found)');
   // Full renders get the branded end card; samples stay just-the-beats. doc.endCard=false opts out.
   if (!sample && doc.endCard !== false) {
     const brand = brandAssets();   // copy logo/banner into publicDir so the end card can staticFile() them
-    props.endCard = Object.assign({ seconds: 14, tagline: 'The human story, before history began.', ...brand },
+    props.endCard = Object.assign({ seconds: 14, ...brand },
       typeof doc.endCard === 'object' ? doc.endCard : {});
-    // Feature a REAL produced video as watch-next (unless studio.json sets endCard.watchNext explicitly,
-    // or false to suppress). The frame lines up with YouTube's right-side end-screen video element.
+    // Feature up to TWO REAL produced videos as watch-next (newest first) — the classic YouTube
+    // end-screen with two video element zones. studio.json may set endCard.watchNext explicitly (an
+    // array or a single object) or false to suppress.
     if (props.endCard.watchNext === undefined) {
-      const wn = pickWatchNext();
-      if (wn) { props.endCard.watchNext = { title: wn.title, id: wn.id }; if (wn.thumb) props.endCard.watchNextThumb = wn.thumb; }
+      const wns = pickWatchNext(2);
+      if (wns.length) props.endCard.watchNext = wns;
     } else if (props.endCard.watchNext === false) {
       delete props.endCard.watchNext;
     }
-    console.log('watch-next:', props.endCard.watchNext ? props.endCard.watchNext.title : '(none — no prior produced video)');
+    if (props.endCard.watchNext && !Array.isArray(props.endCard.watchNext)) props.endCard.watchNext = [props.endCard.watchNext];
+    console.log('watch-next:', (props.endCard.watchNext || []).map((w) => w.title).join(' + ') || '(none — no prior produced video)');
   }
   // A sample renders a FRAME WINDOW of the full composition — NOT a sliced sub-composition. Slicing the
   // beats array silently dropped the per-beat narration <Audio> (verified: sample renders came out mute);
@@ -194,10 +203,12 @@ async function main() {
     console.log('sample frame range:', frameRange[0] + '..' + frameRange[1]);
     // Shorts overlays replace whatever captions those beats had: the hook IS the opener, the mid
     // overlay lands on the middle beat, the end overlay on the final beat (Shorts retention text).
-    const cap = (t) => ({ text: t, pos: 'top-center', anim: 'punch' });
-    if (flags.hook && inRange.length) inRange[0].caption = cap(flags.hook);
-    if (flags.ovmid && inRange.length >= 3) inRange[Math.floor(inRange.length / 2)].caption = cap(flags.ovmid);
-    if (flags.ovend && inRange.length >= 2) inRange[inRange.length - 1].caption = cap(flags.ovend);
+    // raw:true → render exactly as written (a punchy hook stays punchy, acronyms intact). Positions use
+    // the vertical bands: hook top, mid centered (big), the funnel CTA in the otherwise-empty bottom band.
+    const cap = (t, pos, anim) => ({ text: t, pos: pos || 'top-center', anim: anim || 'punch', raw: true });
+    if (flags.hook && inRange.length) inRange[0].caption = cap(flags.hook, 'top-center', 'punch');
+    if (flags.ovmid && inRange.length >= 3) inRange[Math.floor(inRange.length / 2)].caption = cap(flags.ovmid, 'center', 'punch');
+    if (flags.ovend && inRange.length >= 2) inRange[inRange.length - 1].caption = cap(flags.ovend, 'lower-third', 'fade');
   }
   if (flags.vertical) { props.width = 1080; props.height = 1920; console.log('vertical 1080x1920 (Shorts)'); }
   const mode = sample ? 'sample' : 'full';

@@ -18,5 +18,5 @@
 
 ## Analytics → next video (Step 13)
 - 48h: views / impressions / CTR / avg % viewed:
-- Once data matures, copy the per-video block into `History/_analytics/retention-log.md` and decide
+- Once data matures, copy the per-video block into `<channel>/_analytics/retention-log.md` and decide
   the ONE fix for the next script.

@@ -11,7 +11,7 @@ channel's login token in `<channel>/_assets/youtube.json` — **all local-only, 
 
 ## 1. Make a Google Cloud project
 1. Go to **https://console.cloud.google.com** (sign in with the Google account that owns the channel).
-2. Top bar → project dropdown → **New Project** → name it e.g. `Before Lore Studio` → **Create** → select it.
+2. Top bar → project dropdown → **New Project** → name it e.g. `My YouTube Studio` → **Create** → select it.
 
 ## 2. Enable the two APIs
 **APIs & Services → Library**, search and **Enable** each:
@@ -21,7 +21,7 @@ channel's login token in `<channel>/_assets/youtube.json` — **all local-only, 
 ## 3. Configure the consent screen
 **APIs & Services → OAuth consent screen**
 - User type: **External** → Create.
-- App name (e.g. `Before Lore Studio`), your email for support + developer contact → Save and continue.
+- App name (e.g. `My YouTube Studio`), your email for support + developer contact → Save and continue.
 - Scopes screen → just **Save and continue** (the Studio requests scopes at connect time).
 - Test users → **+ Add users** → add **your own Google email** → Save and continue.
 - Back on the OAuth consent screen overview → **Publish app** → Confirm.

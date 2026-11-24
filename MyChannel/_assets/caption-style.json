@@ -1,0 +1,9 @@
+{
+  "font": "gloria",
+  "color": "#b91d1d",
+  "accent": "#f0883c",
+  "size": 80,
+  "case": "sentence",
+  "treatment": "shadow",
+  "tilt": false
+}

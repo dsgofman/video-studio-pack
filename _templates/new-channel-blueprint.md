@@ -1,11 +1,11 @@
 # New Channel Blueprint — TEMPLATE
 
 Copy this file to `<NewChannelFolder>\channel.md` and fill it in to launch a new channel/category.
-The global `..\..\CLAUDE.md` rules (Prime Directive, pipeline, standards) apply unchanged — this
+The global `../CLAUDE.md` rules (Prime Directive, pipeline, standards) apply unchanged — this
 file only defines the new channel's **identity and strategy**.
 
 **Recommended way to fill it:** have Claude run a research pass first (niche viability, competition,
-RPM, positioning) — the same kind that produced the `History` channel. Prompt:
+RPM, positioning) — the kind that should precede any new channel. Prompt:
 > "Research whether `<niche>` is a viable faceless-channel lane in the current format: who already
 > owns it, the supply gap, realistic RPM, the best positioning angle, and 10 launch ideas. Verify
 > high-stakes claims (RPM, monetization policy changes) against current sources."

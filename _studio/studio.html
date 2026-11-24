@@ -3,23 +3,23 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>🎬 Video Studio</title>
+<title>🎬 YouTube Studio</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect x='6' y='14' width='88' height='72' rx='14' fill='%23e58146'/%3E%3Cpath d='M8 36h84M30 15 22 36M55 15 47 36M80 15 72 36' stroke='%231a0f05' stroke-width='7' fill='none' stroke-linecap='round'/%3E%3Cpath d='m44 50 22 12-22 12z' fill='%231a0f05'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&display=swap" rel="stylesheet">
 <style>
   /* ============ DESIGN TOKENS ============ */
   :root{
     color-scheme:dark;
-    /* Warm-charcoal (brown-black) base — lamplit, not clinical */
-    --bg:#17120d; --panel:#211a13; --panel-2:#281f17; --panel-3:#31261c;
-    --field:#241c14; --line:#3a2e22; --line-2:#4d3d2d;
-    --ink:#f3ece0; --muted:#bcae98; --faint:#897c69;
-    /* Ink-stamp flame accent */
-    --accent:#e58146; --accent-2:#f49d5e; --accent-ink:#1a0f05; --accent-soft:rgba(229,129,70,.16); --accent-line:rgba(229,129,70,.46);
-    /* Natural-dye supportive hues */
+    /* Neutral graphite base — greys, not warm */
+    --bg:#15161a; --panel:#1c1e24; --panel-2:#23252c; --panel-3:#2c2f38;
+    --field:#1f2128; --line:#33363f; --line-2:#454954;
+    --ink:#eceef3; --muted:#a4abb8; --faint:#6e7480;
+    /* Signal-yellow accent (#ffe000) — the one bright on the greys */
+    --accent:#ffe000; --accent-2:#ffe94d; --accent-ink:#1a1c20; --accent-soft:rgba(255,224,0,.15); --accent-line:rgba(255,224,0,.5);
+    /* Supportive hues kept cool/orange so yellow stays the only signal colour */
     --info:#74a8cd; --info-soft:rgba(116,168,205,.15);
-    --ok:#7bb069; --ok-soft:rgba(123,176,105,.15);
-    --warn:#e0b14a; --warn-soft:rgba(224,177,74,.15);
+    --ok:#6fbf73; --ok-soft:rgba(111,191,115,.15);
+    --warn:#e0913a; --warn-soft:rgba(224,145,58,.15);
     --danger:#df7058; --danger-soft:rgba(223,112,88,.15);
     --card:var(--panel);
     --radius:13px; --radius-sm:9px; --radius-lg:18px;
@@ -32,18 +32,19 @@
   }
   [data-theme="light"]{
     color-scheme:light;
-    /* Sun-bleached parchment / dried-clay */
-    --bg:#efe6d6; --panel:#fcf8f0; --panel-2:#f6efe1; --panel-3:#efe5d3;
-    --field:#fdfaf4; --line:#e2d6c1; --line-2:#cfbfa3;
-    --ink:#2a2015; --muted:#6b5d4b; --faint:#998a73;
-    --accent:#c4631f; --accent-2:#d97432; --accent-ink:#fff8f0; --accent-soft:rgba(196,99,31,.13); --accent-line:rgba(196,99,31,.5);
+    /* Soft neutral greys */
+    --bg:#eaecf0; --panel:#ffffff; --panel-2:#f3f5f8; --panel-3:#e8ebf0;
+    --field:#fbfcfe; --line:#dde1e8; --line-2:#c4cad4;
+    --ink:#1c1f25; --muted:#5b626e; --faint:#8a909c;
+    /* Yellow accent deepened to stay legible on light; fills/glows keep the bright #ffe000 tint */
+    --accent:#8a6d00; --accent-2:#b8930a; --accent-ink:#1a1c20; --accent-soft:rgba(255,224,0,.22); --accent-line:rgba(138,109,0,.55);
     --info:#2f6f9e; --info-soft:rgba(47,111,158,.11);
     --ok:#4d7a3a; --ok-soft:rgba(77,122,58,.13);
-    --warn:#8f6411; --warn-soft:rgba(143,100,17,.14);
+    --warn:#9a6411; --warn-soft:rgba(154,100,17,.14);
     --danger:#bd4630; --danger-soft:rgba(189,70,48,.11);
-    --shadow-sm:0 1px 2px rgba(86,58,22,.07);
-    --shadow:0 1px 2px rgba(86,58,22,.06),0 14px 32px -16px rgba(86,58,22,.22);
-    --shadow-lg:0 26px 64px -26px rgba(86,58,22,.32);
+    --shadow-sm:0 1px 2px rgba(20,22,28,.07);
+    --shadow:0 1px 2px rgba(20,22,28,.06),0 14px 32px -16px rgba(20,22,28,.18);
+    --shadow-lg:0 26px 64px -26px rgba(20,22,28,.26);
   }
   /* ============ BASE ============ */
   *{box-sizing:border-box}
@@ -80,10 +81,6 @@
     background:linear-gradient(150deg,var(--accent-2),var(--accent));box-shadow:0 4px 14px -4px var(--accent-line),inset 0 1px 0 rgba(255,255,255,.28)}
   .brandmark .wordmark{font-weight:800;letter-spacing:-.02em;font-size:17px}
   .brandmark .wordmark small{font-weight:600;color:var(--muted);margin-left:8px;font-size:12px;letter-spacing:0}
-  .switcher{display:flex;align-items:center;gap:7px;background:var(--field);border:1px solid var(--line);border-radius:10px;padding:0 9px 0 11px;color:var(--muted);transition:border-color var(--t)}
-  .switcher:hover{border-color:var(--line-2)}
-  .switcher:focus-within{border-color:var(--accent-line);box-shadow:var(--ring)}
-  .switcher select{appearance:none;-webkit-appearance:none;background:none;border:none;color:var(--ink);font-weight:600;font-size:13.5px;padding:8px 2px;max-width:44vw;cursor:pointer}
   .switcher .chev{pointer-events:none;color:var(--faint);flex:0 0 auto}
   .iconbtn{display:grid;place-items:center;width:34px;height:34px;border:1px solid var(--line);background:var(--field);border-radius:9px;color:var(--muted);transition:all var(--t);flex:0 0 auto}
   .iconbtn:hover{color:var(--ink);border-color:var(--line-2);background:var(--panel-2)}
@@ -95,6 +92,11 @@
   .savechip{font-size:12px;font-weight:700;padding:6px 12px;border-radius:999px;border:1px solid var(--line);background:var(--field);color:var(--faint);display:flex;align-items:center;gap:6px;transition:all var(--t);min-width:82px;justify-content:center}
   .savechip.saving{color:var(--info);border-color:var(--info-soft);background:var(--info-soft)}
   .savechip.saved{color:var(--ok);border-color:var(--ok-soft);background:var(--ok-soft)}
+  /* live activity pill — shows what's generating right now (polls /api/status) */
+  .actchip{display:inline-flex;align-items:center;gap:7px;font-size:12px;font-weight:600;color:var(--ink);background:var(--accent-soft);border:1px solid var(--accent-line);padding:5px 11px;border-radius:999px;white-space:nowrap;max-width:42vw;overflow:hidden;text-overflow:ellipsis}
+  .actchip[hidden]{display:none}
+  .actchip .spin{width:11px;height:11px;border-radius:50%;border:2px solid var(--accent);border-top-color:transparent;display:inline-block;animation:actspin .8s linear infinite;flex:none}
+  @keyframes actspin{to{transform:rotate(360deg)}}
   /* ============ STEPPER ============ */
   .stepper{display:flex;align-items:center;gap:0;padding:16px 22px 6px;max-width:1240px;margin:0 auto;overflow-x:auto}
   .step{display:flex;align-items:center;gap:9px;padding:7px 10px;border-radius:11px;cursor:pointer;color:var(--muted);font-weight:700;font-size:13.5px;white-space:nowrap;transition:all var(--t);flex:0 0 auto}
@@ -287,6 +289,15 @@
   .imgbar .row{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:9px}
   .imgbar .est{font-size:12.5px;color:var(--muted)}
   .imgbar b{font-size:14px}
+  .caststrip{display:flex;gap:12px;align-items:center;border:1px solid var(--line);border-radius:12px;padding:10px 12px;margin:2px 0 14px;background:var(--panel)}
+  .caststrip.ok{border-color:var(--ok-soft);background:var(--ok-soft)}
+  .caststrip.warn{border-color:var(--warn);background:var(--warn-soft)}
+  .caststrip .cstthumb{flex:0 0 88px;height:56px;border-radius:8px;overflow:hidden;background:#fff;display:flex;align-items:center;justify-content:center}
+  .caststrip .cstthumb img{width:100%;height:100%;object-fit:contain}
+  .caststrip .est{font-size:12px;color:var(--muted);margin-top:2px;line-height:1.45}
+  .caststrip b{font-size:13.5px}
+  .kitview{white-space:pre-wrap;word-break:break-word;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:12px;line-height:1.5;
+    background:var(--field);border:1px solid var(--line);border-radius:10px;padding:12px 14px;margin-top:8px;max-height:340px;overflow:auto;color:var(--ink)}
   .musicgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:10px;margin-top:11px}
   .musiccard{background:var(--panel-2);border:1px solid var(--line);border-radius:11px;padding:11px 13px;display:flex;flex-direction:column;gap:4px}
   .musiccard.isbed{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent) inset}
@@ -362,12 +373,24 @@
   .scenethumb{width:240px;max-width:100%;aspect-ratio:16/9;object-fit:cover;border:1px solid var(--line);border-radius:8px;margin-top:8px;background:var(--field);display:block}
   /* ============ SCENE GALLERY (image-forward) ============ */
   .scenehdr{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:6px}
+  /* 🎯 length target + live runtime readout */
+  .lenbox{background:var(--panel-2);border:1px solid var(--line);border-radius:var(--radius-sm);padding:12px 14px;margin:0 0 16px}
+  .lenrow{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+  .lenlabel{font-weight:800;font-size:13px;color:var(--ink)}
+  .lensel{background:var(--field);color:var(--ink);border:1px solid var(--line-2);border-radius:8px;padding:5px 9px;font-weight:700;font-size:13px;cursor:pointer}
+  .lensel:focus{outline:none;box-shadow:var(--ring)}
+  .lenstat{font-size:13px;line-height:1.5;margin-top:9px;padding:8px 11px;border-radius:8px;border:1px solid var(--line);background:var(--field);color:var(--muted)}
+  .lenstat.good{background:var(--ok-soft);border-color:var(--ok);color:var(--ink)}
+  .lenstat.warnx{background:var(--warn-soft);border-color:var(--warn);color:var(--ink)}
+  .lenstat.badx{background:var(--danger-soft);border-color:var(--danger);color:var(--ink)}
   .viewtoggle{display:inline-flex;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:var(--field);padding:3px;gap:3px}
   .viewtoggle button{border:none;background:none;padding:6px 14px;font-weight:700;font-size:12.5px;color:var(--muted);border-radius:7px;transition:all var(--t)}
   .viewtoggle button:hover{color:var(--ink)}
   .viewtoggle button.on{background:var(--accent);color:var(--accent-ink)}
   .progbar{height:7px;border-radius:999px;background:var(--field);overflow:hidden;margin-top:11px;border:1px solid var(--line)}
   .progbar > i{display:block;height:100%;background:linear-gradient(90deg,var(--ok),var(--accent));transition:width .35s cubic-bezier(.4,0,.2,1)}
+  .progbar.indet > i{background:linear-gradient(90deg,var(--ok),var(--accent),var(--ok));background-size:200% 100%;animation:progGlow 1.6s linear infinite}
+  @keyframes progGlow{0%{background-position:0% 0}100%{background-position:200% 0}}
   .sceneGrid{display:flex;flex-direction:column;gap:14px;margin-top:14px}
   .scard{display:grid;grid-template-columns:340px 1fr;gap:18px;background:var(--panel);border:1px solid var(--line);border-radius:var(--radius-lg);padding:15px;box-shadow:var(--shadow-sm);transition:border-color var(--t)}
   .scard:hover{border-color:var(--line-2)}
@@ -396,6 +419,9 @@
   .kindchip:hover{border-color:var(--line-2)}
   .kindchip.illus{background:var(--field);color:var(--muted)}
   .kindchip.info{background:rgba(141,107,221,.16);color:#b69cf0;border-color:#6d4fb0}
+  .kindchip.hq{background:var(--field);color:var(--muted)}
+  .kindchip.hq.on{background:var(--accent-soft);color:var(--accent);border-color:var(--accent-line)}
+  .badge.hq{background:var(--accent-soft);color:var(--accent);border:1px solid var(--accent-line);left:auto !important;right:9px}
   .txtrow{display:flex;gap:7px;align-items:center;margin-top:11px;flex-wrap:wrap}
   .txtrow .txtlab{font-size:11px;font-weight:800;letter-spacing:.03em;text-transform:uppercase;color:var(--muted);flex:0 0 auto}
   .txtrow .txtin{flex:1;min-width:140px;border:1px solid var(--line);border-radius:8px;padding:7px 10px;font:inherit;font-size:13px;background:var(--field);color:var(--ink)}
@@ -464,7 +490,55 @@
   .switcher{display:flex;align-items:center;gap:7px;background:var(--field);border:1px solid var(--line);border-radius:10px;padding:0 9px 0 11px;color:var(--muted);box-shadow:var(--shadow-sm);transition:border-color var(--t),background var(--t)}
   .switcher:hover{border-color:var(--line-2);background:var(--panel-2)}
   .switcher:focus-within{border-color:var(--accent-line);box-shadow:var(--ring)}
-  .switcher select{appearance:none;-webkit-appearance:none;background:none;border:none;color:var(--ink);font-weight:600;font-size:13.5px;padding:8px 2px;max-width:44vw;cursor:pointer}
+  /* switcher uses the custom dropdown, kept bare so the pill provides the frame; the pill glows when open */
+  .switcher .ddtrigger{flex:1;min-width:0;background:none;border:none;box-shadow:none;color:var(--ink);font-weight:600;font-size:13.5px;padding:8px 2px;min-height:0;max-width:44vw;gap:6px}
+  .switcher .ddtrigger:hover{background:none}
+  .switcher .ddtrigger[aria-expanded="true"],.switcher .ddtrigger:focus-visible{background:none;border:none;box-shadow:none}
+  .switcher:has(.ddtrigger[aria-expanded="true"]){border-color:var(--accent-line);box-shadow:var(--ring);background:var(--panel-2)}
+  /* ===== SELECTS — unified, theme-aware (everything except .switcher) ===== */
+  select:not(.switcher select){
+    appearance:none;-webkit-appearance:none;-moz-appearance:none;
+    font:inherit;font-size:13px;font-weight:600;line-height:1.2;
+    color:var(--ink);background-color:var(--field);
+    border:1px solid var(--line);border-radius:var(--radius-sm,8px);
+    padding:8px 32px 8px 11px;min-height:36px;box-sizing:border-box;cursor:pointer;
+    max-width:100%;text-overflow:ellipsis;white-space:nowrap;
+    transition:border-color var(--t),box-shadow var(--t),background-color var(--t);
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='13' height='13' viewBox='0 0 24 24' fill='none' stroke='%23897c69' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'><path d='m6 9 6 6 6-6'/></svg>");
+    background-repeat:no-repeat;background-position:right 10px center;background-size:13px;
+  }
+  select:not(.switcher select):hover{border-color:var(--line-2);background-color:var(--panel-2)}
+  select:not(.switcher select):focus,
+  select:not(.switcher select):focus-visible{outline:none;border-color:var(--accent-line);box-shadow:var(--ring)}
+  [data-theme="light"] select:not(.switcher select){
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='13' height='13' viewBox='0 0 24 24' fill='none' stroke='%23998a73' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'><path d='m6 9 6 6 6-6'/></svg>");
+  }
+  select:not(.switcher select) option,
+  select:not(.switcher select) optgroup{ background-color:var(--panel-2);color:var(--ink); }
+  select:not(.switcher select) option:checked{background-color:var(--accent-soft,var(--accent-line));color:var(--ink)}
+  select{color-scheme:light dark}
+  [data-theme="light"] select{color-scheme:light}
+  /* ===== Custom dropdown — themed OPEN list (native <select> popups can't be styled to match the cockpit) ===== */
+  .ddtrigger{appearance:none;font:inherit;font-size:13px;font-weight:600;line-height:1.2;color:var(--ink);background:var(--field);
+    border:1px solid var(--line);border-radius:var(--radius-sm,9px);padding:8px 11px;min-height:36px;box-sizing:border-box;cursor:pointer;
+    display:inline-flex;align-items:center;gap:9px;max-width:100%;text-align:left;transition:border-color var(--t),box-shadow var(--t),background-color var(--t)}
+  .ddtrigger:hover{border-color:var(--line-2);background:var(--panel-2)}
+  .ddtrigger[aria-expanded="true"],.ddtrigger:focus-visible{outline:none;border-color:var(--accent-line);box-shadow:var(--ring)}
+  .ddtrigger:disabled{opacity:.55;cursor:not-allowed}
+  .ddtrigger .ddlabel{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .ddtrigger .ddcaret{flex:0 0 auto;width:13px;height:13px;background:no-repeat center/13px;transition:transform var(--t);
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='13' height='13' viewBox='0 0 24 24' fill='none' stroke='%236e7480' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'><path d='m6 9 6 6 6-6'/></svg>")}
+  [data-theme="light"] .ddtrigger .ddcaret{background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='13' height='13' viewBox='0 0 24 24' fill='none' stroke='%238a909c' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'><path d='m6 9 6 6 6-6'/></svg>")}
+  .ddtrigger[aria-expanded="true"] .ddcaret{transform:rotate(180deg)}
+  .ddmenu{position:fixed;z-index:140;background:var(--panel-2);border:1px solid var(--line-2);border-radius:11px;box-shadow:var(--shadow-lg);
+    padding:5px;max-height:min(54vh,380px);overflow:auto;animation:ddpop .12s cubic-bezier(.4,0,.2,1)}
+  @keyframes ddpop{from{opacity:0;transform:translateY(-5px)}to{opacity:1;transform:none}}
+  .dditem{padding:8px 11px;border-radius:7px;font-size:13px;font-weight:600;color:var(--ink);cursor:pointer;white-space:nowrap;display:flex;align-items:center;gap:9px}
+  .dditem:hover{background:var(--field)}
+  .dditem.on{background:var(--accent-soft);color:var(--ink)}
+  .dditem.on::after{content:'✓';margin-left:auto;color:var(--accent);font-weight:800}
+  .sbfield .ddtrigger,.txtrow .ddtrigger{font-size:12.5px;padding:7px 9px;min-height:0;gap:6px}
+  .sbfield .ddtrigger{width:100%}
   .iconbtn{display:grid;place-items:center;width:34px;height:34px;border:1px solid var(--line);background:var(--field);border-radius:9px;color:var(--muted);
     box-shadow:0 2px 0 var(--line),inset 0 1px 0 color-mix(in srgb,var(--ink) 6%,transparent);
     transition:color var(--t),border-color var(--t),background var(--t),transform var(--t),box-shadow var(--t);flex:0 0 auto}
@@ -549,7 +623,7 @@
   .btn.accent:hover::after{transform:translateX(120%)}
 
   @media(prefers-reduced-motion:reduce){
-    .panel.active,.stepnode .pulse,.savechip.saved{animation:none}
+    .panel.active,.stepnode .pulse,.savechip.saved,.actchip .spin{animation:none}
     .titlerow:hover,.scard:hover,.thumbcard:hover,.ideacard:hover,.chatbtn:hover{transform:none}
     .btn.accent::after{display:none}
   }
@@ -598,28 +672,26 @@
 <header class="topbar">
   <span class="brandmark">
     <span class="logo"><svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="4.5" width="19" height="15" rx="2.4"/><path d="M2.7 9.2h18.6M8 4.6 6.2 9.2M13 4.6l-1.8 4.6M18 4.6l-1.8 4.6"/></svg></span>
-    <span class="wordmark">Studio<small id="ch"></small></span>
+    <span class="wordmark">YouTube Studio<small id="ch"></small></span>
   </span>
-  <label class="switcher" title="Channel">
+  <div class="switcher" id="channelSwitch" title="Channel">
     <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 2 9 5-9 5-9-5 9-5Z"/><path d="m3 12 9 5 9-5"/><path d="m3 17 9 5 9-5"/></svg>
-    <select id="channelSel"></select>
-    <svg class="chev" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
-  </label>
-  <label class="switcher" title="Switch video">
+  </div>
+  <div class="switcher" id="videoSwitch" title="Switch video">
     <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="5" width="19" height="14" rx="3"/><path d="m10 9 5 3-5 3z"/></svg>
-    <select id="videoSel"></select>
-    <svg class="chev" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
-  </label>
+  </div>
   <button class="iconbtn" id="newproj" title="New project"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg></button>
   <button class="iconbtn" id="castbtn" title="Character bank"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></button>
   <button class="iconbtn" id="ytbtn" title="Connect YouTube"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="6" width="19" height="12" rx="3.5"/><path d="m10 9.2 5 2.8-5 2.8z" fill="currentColor" stroke="none"/></svg></button>
+  <button class="iconbtn" id="pulsebtn" title="Pulse — analytics dashboard"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><rect x="7" y="12" width="3" height="6"/><rect x="12.5" y="8" width="3" height="10"/><rect x="18" y="4" width="3" height="14"/></svg></button>
   <button class="iconbtn" id="refresh" title="Reload from disk"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><path d="M21 4v5h-5"/></svg></button>
   <span class="spacer"></span>
   <span class="metastrip" id="meta"></span>
   <button class="iconbtn" id="themeToggle" title="Toggle theme"></button>
+  <span class="actchip" id="activity" hidden></span>
   <span class="savechip" id="save">idle</span>
 </header>
-<nav class="stepper" id="tabs" aria-label="Production pipeline"></nav>
+<nav class="stepper" id="tabs" aria-label="Production pipeline" title="Tip: press 1–6 to jump between stages"></nav>
 <main id="main"></main>
 
 <button class="chatbtn" id="chatbtn" title="Ask Claude — edits the Studio for you"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.5 8.5 0 0 1-12.3 7.6L3 21l1.9-5.7A8.5 8.5 0 1 1 21 11.5z"/></svg> Ask Claude</button>
@@ -634,7 +706,12 @@
 const qs = new URLSearchParams(location.search);
 let CH = qs.get('channel'), ID = qs.get('id');
 let doc = null, activeTab = 'packaging';
+let sheetInfo = null;   // {active, sheets:[{slug,title,count,hasImage,source}]} for the open video — cast at a glance
 const STAGES = [['idea','① Idea'],['packaging','② Packaging'],['script','③ Script'],['scenes','④ Scenes'],['qc','⑤ QC'],['shorts','⑥ Shorts']];
+async function refreshSheetInfo(){
+  if(!ID){sheetInfo=null;return;}
+  try{ sheetInfo=await(await fetch('/api/sheets?channel='+encodeURIComponent(CH)+'&id='+encodeURIComponent(ID))).json(); }catch(_){ sheetInfo=null; }
+}
 
 const el = (t,a={},...k)=>{const e=document.createElement(t);for(const[p,v]of Object.entries(a)){
   if(p==='class')e.className=v;else if(p==='html')e.innerHTML=v;else if(p.startsWith('on'))e.addEventListener(p.slice(2),v);else e.setAttribute(p,v);}
@@ -676,20 +753,59 @@ function renderMeta(){
 }
 
 /* ---------- save ---------- */
-let saveTimer=null;
+let saveTimer=null,savePending=false;   // savePending: an edit exists that the debounced save hasn't snapshotted yet
 function setChip(s,txt){const c=document.getElementById('save');c.className='savechip '+s;c.textContent=txt;}
+
+// ---- Global ACTIVITY indicator: an always-on poll of /api/status so you can SEE what's generating
+// (and never have to refresh or ask). Shows a spinner + live label ("Generating images (12/40)") in the
+// top bar whenever ANY job is in flight, and auto-refreshes the view the moment a job finishes. ----
+let _actTimer=null,_actID=null,_actPrev=new Set();
+function setActivity(label){
+  const el=document.getElementById('activity'); if(!el)return;
+  if(label){ el.hidden=false; el.innerHTML='<span class="spin"></span>'; el.append(document.createTextNode(label)); el.title=label; }
+  else { el.hidden=true; el.textContent=''; el.removeAttribute('title'); }
+}
+async function pollActivity(){
+  if(ID!==_actID){_actID=ID;_actPrev=new Set();}        // video switched → reset completion tracking
+  if(!ID){setActivity('');return;}
+  try{
+    const j=await(await fetch('/api/status?channel='+encodeURIComponent(CH)+'&id='+encodeURIComponent(ID))).json();
+    setActivity(j.busy?j.label:'');
+    const now=new Set((j.tasks||[]).map(t=>t.task));
+    const NAMES={scenes:'Scene list',images:'Images',narration:'Narration',script:'Script',packaging:'Titles',ideas:'Ideas',research:'Research',shorts:'Shorts'};
+    for(const t of _actPrev){ if(!now.has(t)){ showToast('✓ '+(NAMES[t]||t)+' ready',5500); load().then(()=>{if(!DASH)render();}).catch(()=>{}); } }
+    _actPrev=now;
+  }catch(_){}
+}
+function startActivityPoll(){ if(_actTimer)clearInterval(_actTimer); pollActivity(); _actTimer=setInterval(pollActivity,3500); }
 function decisions(){const d={};for(const[k,v]of Object.entries(doc.stages||{}))if(v.decision)d[k]=v.decision;return d;}
 function queueSave(){
   setChip('saving','● saving…');
+  savePending=true;
   clearTimeout(saveTimer);
-  saveTimer=setTimeout(async()=>{
-    try{
-      const r=await fetch(`/api/video?channel=${encodeURIComponent(CH)}&id=${encodeURIComponent(ID)}`,
-        {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({decisions:decisions()})});
-      if(!r.ok)throw new Error(r.status);
-      setChip('saved','✓ saved');renderTabs();
-    }catch(e){setChip('','⚠ save failed');}
-  },450);
+  saveTimer=setTimeout(flushSave,450);
+}
+// Fire the pending decision save NOW. Used by the debounce timer, and directly before any action
+// whose server side re-reads decisions from disk (e.g. extend-and-regenerate) — a debounced save
+// alone would still be pending when the server read happens.
+async function flushSave(){
+  clearTimeout(saveTimer);
+  savePending=false;                      // decisions() snapshots the live doc at this moment
+  try{
+    const r=await fetch(`/api/video?channel=${encodeURIComponent(CH)}&id=${encodeURIComponent(ID)}`,
+      {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({decisions:decisions()})});
+    if(!r.ok)throw new Error(r.status);
+    setChip('saved','✓ saved');renderTabs();
+  }catch(e){setChip('','⚠ save failed');}
+}
+// Adopt a freshly-fetched doc WITHOUT clobbering decision edits the debounced save hasn't flushed
+// yet. Background polls replace `doc` every few seconds while a generation job runs; an unmerged
+// replacement between an edit and its 450ms save silently threw the edit away.
+function adoptDoc(d2){
+  if(savePending&&doc&&doc.stages&&d2&&d2.stages){
+    for(const[k,v]of Object.entries(doc.stages)){ if(v&&v.decision){ d2.stages[k]=d2.stages[k]||{}; d2.stages[k].decision=v.decision; } }
+  }
+  doc=d2;
 }
 const dec=(stage)=>{doc.stages[stage]=doc.stages[stage]||{};return doc.stages[stage].decision=doc.stages[stage].decision||{};};
 
@@ -704,38 +820,162 @@ async function boot(){
   document.getElementById('newproj').onclick=openNewProject;
   document.getElementById('castbtn').onclick=openCast;
   document.getElementById('ytbtn').onclick=openYouTube;
+  document.getElementById('pulsebtn').onclick=enterPulse;
   const bm=document.querySelector('.brandmark');
   if(bm){bm.style.cursor='pointer';bm.title='Dashboard — the whole slate';bm.onclick=enterDashboard;}
   checkKey();
   checkVoice();
   checkAssemble();
-  if(wantDash)await enterDashboard();
+  document.addEventListener('keydown',e=>{   // pipeline nav: press 1–6 to jump stages (Idea…Shorts)
+    if(DASH||!doc||e.metaKey||e.ctrlKey||e.altKey)return;
+    const t=e.target,tag=(t&&t.tagName||'').toLowerCase();
+    if(tag==='input'||tag==='textarea'||tag==='select'||(t&&t.isContentEditable)||document.getElementById('castwrap')||document.getElementById('npwrap'))return;
+    if(/^[1-6]$/.test(e.key)){const s=STAGES[+e.key-1];if(s){e.preventDefault();activeTab=s[0];renderTabs();render();}}
+  });
+  if(qs.has('pulse')) await enterPulse();
+  else if(wantDash) await enterDashboard();
+  startActivityPoll();   // always-on generation indicator (top bar) — survives tab/video switches
 }
 async function loadChannels(){
   try{ CHANNELS=await(await fetch('/api/channels')).json(); }catch(_){ CHANNELS=[]; }
-  const csel=document.getElementById('channelSel'); csel.innerHTML='';
-  CHANNELS.forEach(c=>csel.append(el('option',{value:c.id},c.name)));
   if(!CH||!CHANNELS.some(c=>c.id===CH)) CH=(CHANNELS[0]||{}).id||CH;
-  if(CH)csel.value=CH;
-  csel.onchange=async()=>{ CH=csel.value; ID=null; await refreshVideoList(!DASH); if(DASH)enterDashboard(); };
+  const wrap=document.getElementById('channelSwitch');
+  [...wrap.querySelectorAll('.ddtrigger')].forEach(e=>e.remove());
+  const dd=dropdown({value:CH,cls:'switcherdd',options:CHANNELS.map(c=>({value:c.id,label:c.name})),
+    onChange:async v=>{ CH=v; ID=null; await refreshVideoList(!DASH); if(DASH)enterDashboard(); }});
+  dd.id='channelSel'; wrap.append(dd);
 }
 function channelName(){ const c=CHANNELS.find(x=>x.id===CH); return c?c.name:CH; }
 async function refreshVideoList(autoOpen=true){
   let all=[]; try{ all=await(await fetch('/api/videos')).json(); }catch(_){}
   const vids=all.filter(v=>v.channel===CH);
-  const sel=document.getElementById('videoSel'); sel.innerHTML='';
-  vids.forEach(v=>sel.append(el('option',{value:v.id},v.title)));
   if(!ID||!vids.some(v=>v.id===ID)) ID=(vids[0]||{}).id||null;
-  sel.onchange=()=>{ ID=sel.value; DASH=false; history.replaceState({},'',`?channel=${CH}&id=${ID}`); load(); };
-  if(ID)sel.value=ID;
+  const wrap=document.getElementById('videoSwitch');
+  [...wrap.querySelectorAll('.ddtrigger')].forEach(e=>e.remove());
+  const dd=dropdown({value:ID||'',cls:'switcherdd',options:vids.length?vids.map(v=>({value:v.id,label:v.title})):[{value:'',label:'No videos yet'}],
+    onChange:v=>{ if(!v)return; ID=v; DASH=false; history.replaceState({},'',`?channel=${CH}&id=${ID}`); load(); }});
+  dd.id='videoSel'; wrap.append(dd);
   if(autoOpen){
     if(ID){ history.replaceState({},'',`?channel=${CH}&id=${ID}`); await load(); }
     else { history.replaceState({},'',`?channel=${CH}`); showEmptyChannel(); }
   }
 }
+/* ---------- PULSE (analytics dashboard) ---------- */
+const SEV_COL={good:'#3a8d5b',bad:'#c0392b',warn:'#c9912f'};
+function yppBar(label,cur,goal,mid){
+  const pct=Math.min(100,Math.round((cur/goal)*100));
+  const box=el('div',{style:'margin-top:8px'});
+  box.append(el('div',{style:'display:flex;justify-content:space-between;font-size:12px;color:var(--muted);margin-bottom:3px'},el('span',{},label),el('span',{},Math.round(cur).toLocaleString()+' / '+goal.toLocaleString())));
+  const track=el('div',{style:'position:relative;height:11px;border-radius:6px;background:var(--line,#33373f);overflow:hidden'});
+  track.append(el('div',{style:`position:absolute;left:0;top:0;bottom:0;width:${pct}%;background:var(--accent);border-radius:6px`}));
+  box.append(track);
+  if(mid){ const mp=Math.min(99,(mid/goal)*100); track.append(el('div',{style:`position:absolute;top:0;bottom:0;left:${mp}%;width:2px;background:var(--ink,#fff);opacity:.45`,title:mid.toLocaleString()+' gate'})); }
+  return box;
+}
+function sparkline(arr,w,h){ w=w||150;h=h||24; if(!arr||arr.length<2)return ''; const max=Math.max(...arr,1); const pts=arr.map((v,i)=>`${(i/(arr.length-1)*w).toFixed(1)},${(h-(v/max)*(h-4)-2).toFixed(1)}`).join(' '); return `<svg width="${w}" height="${h}" viewBox="0 0 ${w} ${h}"><polyline points="${pts}" fill="none" stroke="var(--accent)" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"/></svg>`; }
+function pulseChannelCard(c){
+  const card=el('div',{style:'border:1px solid var(--line,#3a3f48);border-radius:12px;padding:14px 16px'});
+  const dot=c.connected?SEV_COL.good:SEV_COL.warn;
+  card.append(el('div',{class:'row',style:'align-items:center;margin:0 0 8px'},el('span',{style:'font-weight:800;font-size:17px'},c.name),el('span',{style:`display:inline-block;width:9px;height:9px;border-radius:50%;background:${dot};margin-left:9px`,title:c.connected?'connected':'not connected'})));
+  if(!c.connected){ card.append(el('div',{style:'color:var(--muted);font-size:13px'},'Not connected. Use 📺 in the top bar to connect this channel and see analytics.')); return card; }
+  const v=c.vitals,d=(n)=>n>0?'▲'+n.toLocaleString():n<0?'▼'+Math.abs(n).toLocaleString():'–';
+  card.append(el('div',{style:'display:flex;gap:16px;flex-wrap:wrap;margin-bottom:6px;font-size:13px'},
+    el('span',{},el('b',{style:'font-size:15px'},String(v.subs)),' subs ',el('span',{style:'color:var(--muted)'},d(v.subsGained28)+'/28d')),
+    el('span',{},el('b',{style:'font-size:15px'},v.views28.toLocaleString()),' views ',el('span',{style:'color:var(--muted)'},d(v.views28Delta))),
+    el('span',{},el('b',{style:'font-size:15px'},v.watchHrs28),' watch-hrs/28d')));
+  card.append(yppBar('Subs → 1,000',c.ypp.subs.cur,c.ypp.subs.goal,500));
+  card.append(yppBar('Watch-hrs → 4,000',c.ypp.watchHours.cur,c.ypp.watchHours.goal));
+  const cad=c.cadence,col=cad.daysSinceLast==null?'var(--muted)':cad.daysSinceLast>13?SEV_COL.bad:cad.daysSinceLast>7?SEV_COL.warn:SEV_COL.good;
+  card.append(el('div',{style:'margin-top:9px;font-size:13px'},'Cadence ',el('b',{},cad.up28+'/28d'),el('span',{style:`color:${col};margin-left:8px`},cad.daysSinceLast==null?'no uploads yet':cad.daysSinceLast+'d since last')));
+  const pl=c.pipeline,steps=[['idea','①'],['packaging','②'],['script','③'],['scenes','④'],['qc','⑤'],['shorts','⑥']];
+  card.append(el('div',{style:'margin-top:8px;font-size:12px;color:var(--muted);display:flex;gap:9px;flex-wrap:wrap'},...steps.map(([k,n])=>el('span',{title:k},n+' '+(pl[k]||0)))));
+  if(c.trend&&c.trend.some(v=>v>0))card.append(el('div',{style:'margin-top:8px;display:flex;align-items:center;gap:8px'},el('span',{style:'font-size:11px;color:var(--muted)'},'views 60d'),el('span',{html:sparkline(c.trend)})));
+  card.append(el('div',{style:'margin-top:8px;font-size:12px;color:var(--muted);display:flex;justify-content:space-between'},el('span',{},'Sponsors (50k) ',el('b',{},(c.sponsorPct||0)+'%')),c.statsAt?el('span',{},'synced '+c.statsAt):el('span',{})));
+  return card;
+}
+function pulseQuadrant(channels){
+  const W=600,H=340,pad=48,cols=['#e0823c','#3f6f9f','#5b8c5a'],pts=[];
+  channels.forEach((c,ci)=>(c.quadrant||[]).forEach(q=>{ if(typeof q.avgPct==='number'&&typeof q.ctr==='number')pts.push({title:q.title,ctr:q.ctr,avp:q.avgPct,color:cols[ci%cols.length]}); }));
+  const xMax=10,yMax=100,X=(val)=>pad+(Math.min(xMax,Math.max(0,val))/xMax)*(W-2*pad),Y=(val)=>H-pad-(Math.min(yMax,Math.max(0,val))/yMax)*(H-2*pad),ink='#8a8f99';
+  let s=`<svg width="100%" viewBox="0 0 ${W} ${H}" style="max-width:600px;color:var(--ink,#e8e8e8)">`;
+  s+=`<line x1="${X(4)}" y1="${pad-12}" x2="${X(4)}" y2="${H-pad}" stroke="${ink}" stroke-dasharray="3 5"/><line x1="${pad}" y1="${Y(50)}" x2="${W-pad}" y2="${Y(50)}" stroke="${ink}" stroke-dasharray="3 5"/>`;
+  s+=`<line x1="${pad}" y1="${H-pad}" x2="${W-pad}" y2="${H-pad}" stroke="currentColor" stroke-width="1.5"/><line x1="${pad}" y1="${pad-12}" x2="${pad}" y2="${H-pad}" stroke="currentColor" stroke-width="1.5"/>`;
+  s+=`<text x="${W/2}" y="${H-8}" text-anchor="middle" font-size="12" fill="${ink}">CTR % →</text><text x="13" y="${H/2}" text-anchor="middle" font-size="12" fill="${ink}" transform="rotate(-90 13 ${H/2})">Avg % viewed →</text>`;
+  const ql=(x,y,t,a)=>`<text x="${x}" y="${y}" font-size="11" fill="${ink}" opacity="0.85" text-anchor="${a||'start'}">${t}</text>`;
+  s+=ql(W-pad-4,Y(yMax)+8,'★ scale this','end')+ql(pad+6,Y(yMax)+8,'re-package')+ql(W-pad-4,H-pad-6,'re-hook','end')+ql(pad+6,H-pad-6,'rethink');
+  s+=`<text x="${X(4)}" y="${H-pad+16}" text-anchor="middle" font-size="10" fill="${ink}">4%</text><text x="${pad-6}" y="${Y(50)+4}" text-anchor="end" font-size="10" fill="${ink}">50%</text>`;
+  pts.forEach(p=>{ s+=`<circle cx="${X(p.ctr).toFixed(1)}" cy="${Y(p.avp).toFixed(1)}" r="7" fill="${p.color}" stroke="#fff" stroke-width="2"/><text x="${(X(p.ctr)+11).toFixed(1)}" y="${(Y(p.avp)+4).toFixed(1)}" font-size="11" fill="currentColor">${(p.title||'').replace(/[<&]/g,'').slice(0,22)}</text>`; });
+  if(!pts.length)s+=`<text x="${W/2}" y="${H/2}" text-anchor="middle" font-size="13" fill="${ink}">Enter CTR on your videos below to plot them</text>`;
+  return s+'</svg>';
+}
+function pulseRecentBlock(channels){
+  const box=el('div',{style:'margin-top:6px'});
+  let any=false;
+  channels.forEach(c=>{ if(!c.connected||!c.recent.length)return; any=true;
+    box.append(el('div',{class:'mchip',style:'margin:12px 0 6px'},c.name));
+    c.recent.forEach(r=>{
+      const row=el('div',{style:'display:flex;align-items:center;gap:12px;padding:7px 8px;font-size:13px;border-bottom:1px solid var(--line,#2a2e36)'});
+      row.append(el('span',{style:'flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap',title:r.title},r.title));
+      row.append(el('span',{style:'color:var(--muted);min-width:64px;text-align:right'},(r.views||0).toLocaleString()+' views'));
+      row.append(el('span',{style:'min-width:80px;text-align:right;color:'+(r.vsAvg==='up'?SEV_COL.good:r.vsAvg==='down'?SEV_COL.bad:'var(--muted)')},(r.avgPct!=null?Math.round(r.avgPct)+'% viewed':'—')));
+      const ctrIn=el('input',{type:'number',step:'0.1',min:'0',placeholder:'CTR%',value:r.ctr!=null?r.ctr:'',style:'width:74px;padding:3px 6px;font-size:12px;border-radius:6px',title:'Enter impressions CTR from YouTube Studio (Reach tab)'});
+      ctrIn.onchange=async()=>{ try{ await fetch('/api/analytics/ctr?channel='+encodeURIComponent(c.id)+'&id='+encodeURIComponent(r.id),{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({ctr:parseFloat(ctrIn.value)})}); }catch(_){ } enterPulse(); };
+      row.append(ctrIn);
+      box.append(row);
+    });
+  });
+  if(!any)box.append(el('div',{style:'color:var(--muted);font-size:13px;margin-top:8px'},'No published videos yet — your scorecard fills in as videos go live.'));
+  return box;
+}
+async function enterPulse(){
+  DASH=true; doc=null; ID=null;
+  history.replaceState({},'','?pulse');
+  document.getElementById('ch').textContent='';
+  document.getElementById('tabs').innerHTML='';
+  document.getElementById('meta').innerHTML='';
+  const m=document.getElementById('main'); m.innerHTML='';
+  const wrap=el('div',{class:'panel active',style:'padding:20px 24px'});
+  const head=el('div',{class:'row',style:'align-items:center;margin:0'});
+  head.append(el('h2',{class:'stage',style:'margin:0'},'📊 Pulse'));
+  head.append(el('span',{class:'spacer'}));
+  const refBtn=el('button',{class:'btn sm'},'⟳ Refresh analytics');
+  refBtn.onclick=async()=>{ refBtn.textContent='Refreshing…'; refBtn.disabled=true; for(const c of CHANNELS){ try{ await fetch('/api/analytics/refresh?channel='+encodeURIComponent(c.id)); }catch(_){ } } enterPulse(); };
+  head.append(refBtn);
+  wrap.append(head);
+  wrap.append(el('p',{class:'sub',style:'margin:2px 0 14px'},'The whole operation at a glance — health, what needs you, and what’s working. CTR isn’t in the YouTube API, so enter it from YouTube Studio below.'));
+  let P; try{ P=await(await fetch('/api/pulse')).json(); }catch(e){ wrap.append(el('div',{class:'locked',style:'padding:24px'},'Could not load analytics: '+e)); m.append(wrap); return; }
+  if(!DASH)return;
+  if(P.error){ wrap.append(el('div',{class:'locked',style:'padding:24px'},'Pulse error: '+P.error)); m.append(wrap); return; }
+  if(P.alerts&&P.alerts.length){
+    const strip=el('div',{style:'display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px'});
+    P.alerts.forEach(a=>{ const col=SEV_COL[a.sev]||SEV_COL.warn; strip.append(el('span',{style:`font-size:13px;font-weight:600;padding:6px 11px;border-radius:8px;border:1px solid ${col};color:${col};background:${col}1a`},a.icon+' '+a.text)); });
+    wrap.append(strip);
+  } else wrap.append(el('div',{style:'margin-bottom:16px;color:var(--muted);font-size:13px'},'✓ All clear — no alerts.'));
+  const cols=el('div',{style:`display:grid;grid-template-columns:repeat(${Math.max(1,P.channels.length)},1fr);gap:16px;margin-bottom:20px`});
+  P.channels.forEach(c=>cols.append(pulseChannelCard(c)));
+  wrap.append(cols);
+  wrap.append(el('div',{class:'stage',style:'font-size:15px;margin:0 0 8px'},'▸ Waiting on you'));
+  if(!P.gateQueue.length)wrap.append(el('div',{style:'color:var(--muted);font-size:13px;margin-bottom:18px'},'Nothing waiting — the pipeline’s clear.'));
+  else{ const gq=el('div',{style:'margin-bottom:18px'}); P.gateQueue.forEach(g=>{ const row=el('div',{style:'display:flex;align-items:center;gap:11px;padding:9px 11px;border:1px solid var(--line,#3a3f48);border-radius:8px;margin-bottom:6px;cursor:pointer'}); row.onclick=()=>openVideo(g.channel,g.id,g.stage); row.append(el('span',{class:'mchip'},g.channelName),el('span',{style:'flex:1;font-size:14px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap'},g.title),el('span',{style:'color:var(--accent);font-weight:600;font-size:13px;white-space:nowrap'},g.gate+' →')); gq.append(row); }); wrap.append(gq); }
+  wrap.append(el('div',{class:'stage',style:'font-size:15px;margin:4px 0 8px'},'▸ What’s working'));
+  wrap.append(el('div',{html:pulseQuadrant(P.channels)}));
+  wrap.append(pulseRecentBlock(P.channels));
+  const coachWrap=el('div',{style:'margin-top:20px'});
+  coachWrap.append(el('div',{class:'stage',style:'font-size:15px;margin:0 0 8px'},'▸ Coach — suggestions from your data'));
+  let anyC=false;
+  for(const c of P.channels){ if(!c.connected)continue; let cd; try{ cd=await(await fetch('/api/coach?channel='+encodeURIComponent(c.id))).json(); }catch(_){ continue; } if(!cd||!cd.suggestions||!cd.suggestions.length)continue; anyC=true;
+    if(cd.oneFix)coachWrap.append(el('div',{style:'padding:10px 13px;border-left:3px solid var(--accent);background:var(--accent)14;border-radius:6px;margin-bottom:9px;font-size:13px'},el('b',{},'★ '+c.name+' — your ONE fix for the next 5: '),cd.oneFix.detail));
+    cd.suggestions.filter(s=>s!==cd.oneFix).forEach(s=>coachWrap.append(el('div',{style:'display:flex;gap:9px;padding:7px 0;font-size:13px;border-bottom:1px solid var(--line,#2a2e36)'},el('span',{class:'mchip',style:'min-width:74px;text-align:center;font-size:10px'},s.conf),el('span',{style:'flex:1'},s.detail))));
+  }
+  if(!anyC)coachWrap.append(el('div',{style:'color:var(--muted);font-size:13px'},'No data-driven suggestions yet — they appear as your published videos accrue views. (Idea/Packaging/Script generation already gets these notes injected automatically.)'));
+  wrap.append(coachWrap);
+  wrap.append(el('div',{style:'margin-top:16px;color:var(--muted);font-size:13px;border-top:1px solid var(--line,#2a2e36);padding-top:10px'},'💸 This month $'+P.spend.monthUsd+' · avg $'+P.spend.perVideoAvg+'/video'+(P.spend.runaway.length?' · ⚠ '+P.spend.runaway.length+' runaway':'')));
+  m.append(wrap);
+}
+
 /* ---------- DASHBOARD (the whole slate, across channels) ---------- */
 async function enterDashboard(){
-  DASH=true; doc=null;
+  DASH=true; doc=null; ID=null;   // ID must clear too, or a finishing background job re-opens that video over the dashboard
   history.replaceState({},'','?');
   document.getElementById('ch').textContent='';
   document.getElementById('tabs').innerHTML='';
@@ -838,8 +1078,7 @@ function openNewProject(){
   card.append(el('div',{class:'modalhead'},el('span',{},'Start a new project'),el('button',{class:'x',title:'Close',onclick:closeNewProject},'×')));
   const bdy=el('div',{class:'modalbody'});
   bdy.append(el('div',{class:'lab'},'Channel'));
-  const csel=el('select',{class:'modalsel'});
-  CHANNELS.forEach(c=>csel.append(el('option',{value:c.id,...(c.id===CH?{selected:'selected'}:{})},c.name)));
+  const csel=dropdown({value:CH,cls:'modalsel',options:CHANNELS.map(c=>({value:c.id,label:c.name}))});
   bdy.append(csel);
   bdy.append(el('div',{class:'lab',style:'margin-top:13px'},'Topic / direction'));
   const tin=el('input',{class:'modalinp',type:'text',placeholder:'a few words — e.g. “why humans became different colors” (or leave blank)'});
@@ -928,6 +1167,14 @@ function startYtPoll(){
   },3000);
 }
 function stopYtPoll(){ if(ytPollTimer){clearInterval(ytPollTimer);ytPollTimer=null;} }
+async function uploadCaptions(box){
+  showToast('💬 Generating + uploading English subtitles…',2500);
+  try{
+    const j=await(await fetch('/api/youtube/captions?channel='+encodeURIComponent(CH)+'&id='+encodeURIComponent(ID),{method:'POST',headers:{'Content-Type':'application/json'},body:'{}'})).json();
+    if(j.error){showToast('⚠ '+j.error,5500);}
+    else showToast('✓ '+(j.reply||'Subtitles uploaded.'),6500);
+  }catch(e){showToast('⚠ '+e,4500);}
+}
 async function startUpload(box,privacy){
   if(!confirm('Upload this video to YouTube as a “'+(privacy||'private')+'” draft?\n\nIt will appear on your channel — you do the final publish in YouTube Studio.'))return;
   box.innerHTML='⬆ Starting upload…';
@@ -942,6 +1189,7 @@ function pollUpload(box){
     let j; try{ j=await(await fetch('/api/youtube/upload-status?channel='+encodeURIComponent(CH)+'&id='+encodeURIComponent(ID))).json(); }catch(_){return;}
     if(j.state==='starting'||j.state==='uploading'){ label.textContent='⬆ Uploading the video… '+(j.pct||0)+'%'; fill.style.width=Math.max(2,j.pct||0)+'%'; }
     else if(j.state==='thumbnail'){ label.textContent='🖼 Setting the thumbnail…'; fill.style.width='100%'; }
+    else if(j.state==='captions'){ label.textContent='💬 Uploading subtitles…'; fill.style.width='100%'; }
     else if(j.state==='done'){ clearInterval(t); if(doc)doc.youtube={videoId:j.videoId,privacy:j.privacy}; box.innerHTML='';
       box.append(el('div',{html:'✓ Uploaded as <b>'+xesc(j.privacy||'private')+'</b>'+(j.note?' —'+xesc(j.note):'')}),
         el('div',{style:'margin-top:7px'},el('a',{class:'btn sm accent',href:j.studioUrl,target:'_blank'},'Open in YouTube Studio to publish →')));
@@ -1067,8 +1315,7 @@ function rosterEditor(){
   head.append(el('div',{class:'lab',style:'margin:0'},'Edit characters in:'));
   const grid=el('div',{class:'castgrid',style:'margin-top:8px'});
   fetch('/api/sheets?channel='+encodeURIComponent(CH)).then(r=>r.json()).then(d=>{
-    const sel=el('select',{class:'modalinp',style:'width:auto;flex:0 0 auto',onchange:e=>{mgrSlug=e.target.value;loadRoster(grid);}});
-    (d.sheets||[]).forEach(s=>{ const o=el('option',{value:s.slug},s.title); if(s.slug===mgrSlug)o.selected=true; sel.append(o); });
+    const sel=dropdown({value:mgrSlug,options:(d.sheets||[]).map(s=>({value:s.slug,label:s.title})),onChange:v=>{mgrSlug=v;loadRoster(grid);}});
     head.append(sel);
   }).catch(()=>{});
   wrap.append(head,grid);
@@ -1151,11 +1398,15 @@ async function removeChar(name){
   }catch(e){showToast('⚠ '+e,3500);}
 }
 async function load(){
+  if(DASH||!ID)return;   // never hijack the Dashboard/Pulse views (e.g. a background job finishing)
   const r=await fetch(`/api/video?channel=${encodeURIComponent(CH)}&id=${encodeURIComponent(ID)}`);
   if(!r.ok){document.getElementById('main').innerHTML='<p>Could not load this video.</p>';return;}
-  doc=await r.json();
+  adoptDoc(await r.json());
+  await refreshSheetInfo();
+  await loadCastColors();
+  await loadCapStyle();
   document.getElementById('ch').textContent=' · '+(doc.workingTitle||ID);
-  scriptChecked=false;scenesChecked=false;ideasChecked=false;packagingChecked=false;shortsChecked=false;shortsStat=null;shortsStatAt=0;setChip('saved','✓ saved');renderTabs();render();refreshChat();
+  scriptChecked=false;scenesChecked=false;ideasChecked=false;packagingChecked=false;shortsChecked=false;shortsStat=null;shortsStatAt=0;shortsUp=null;shortsUpChecked=false;ytConn=null;ytConnChecked=false;funnelStatChecked=false;funnelStat=null;setChip('saved','✓ saved');renderTabs();render();refreshChat();refreshLen();
 }
 function stepState(k){
   const raw=(doc.stages?.[k]?.status)||'locked';
@@ -1181,17 +1432,24 @@ function renderTabs(){
   });
 }
 function render(){
-  const m=document.getElementById('main');m.innerHTML='';
+  // Build the new view in a detached fragment, then swap it in with ONE replaceChildren — no empty
+  // intermediate paint (the old innerHTML='' wiped to blank first → visible flash + scroll jump on every
+  // poll-driven re-render). Scroll position is preserved so progress polls don't yank the page to the top.
+  const m=document.getElementById('main');
+  const sc=document.scrollingElement?document.scrollingElement.scrollTop:0;
   renderMeta();
+  const frag=document.createDocumentFragment();
   const st=doc.stages?.[activeTab];
-  if(activeTab==='qc'){m.append(qcPanel(st||{}));return;}   // QC is deterministic — usable as soon as a storyboard exists
-  if(activeTab==='shorts'){m.append(shortsPanel(st||{}));return;}   // Shorts Lab — usable once beats are voiced
-  if(!st||st.status==='locked'){m.append(lockedPanel());return;}
-  if(activeTab==='idea')m.append(ideaPanel(st));
-  else if(activeTab==='packaging')m.append(packagingPanel(st));
-  else if(activeTab==='script')m.append(scriptPanel(st));
-  else if(activeTab==='scenes')m.append(scenesPanel(st));
-  else m.append(lockedPanel());
+  if(activeTab==='qc')frag.append(qcPanel(st||{}));   // QC is deterministic — usable as soon as a storyboard exists
+  else if(activeTab==='shorts')frag.append(shortsPanel(st||{}));   // Shorts Lab — usable once beats are voiced
+  else if(!st||st.status==='locked')frag.append(lockedPanel());
+  else if(activeTab==='idea')frag.append(ideaPanel(st));
+  else if(activeTab==='packaging')frag.append(packagingPanel(st));
+  else if(activeTab==='script')frag.append(scriptPanel(st));
+  else if(activeTab==='scenes')frag.append(scenesPanel(st));
+  else frag.append(lockedPanel());
+  m.replaceChildren(frag);
+  if(sc&&document.scrollingElement)document.scrollingElement.scrollTop=sc;
 }
 function lockedPanel(){
   const labels={script:'Scripting',scenes:'Scenes & image prompts',qc:'Pre-publish QC'};
@@ -1201,17 +1459,91 @@ function lockedPanel(){
 }
 
 /* ---------- SCRIPT ---------- */
+// Custom dropdown: a themed trigger + a fixed-position popup list (so the OPEN list matches the cockpit,
+// which a native <select> can't). Returns the trigger element; exposes a `.value` getter/setter for compat.
+function dropdown(opts){
+  const items=(opts.options||[]).map(o=>typeof o==='string'?{value:o,label:o}:o);
+  let val=opts.value!=null?String(opts.value):(items[0]?String(items[0].value):'');
+  const trigger=el('button',{type:'button',class:'ddtrigger'+(opts.cls?' '+opts.cls:''),title:opts.title||'','aria-haspopup':'listbox','aria-expanded':'false'});
+  if(opts.disabled)trigger.disabled=true;
+  if(opts.minWidth)trigger.style.minWidth=opts.minWidth;
+  const labelEl=el('span',{class:'ddlabel'}),caret=el('span',{class:'ddcaret'});
+  trigger.append(labelEl,caret);
+  const paint=()=>{const it=items.find(i=>String(i.value)===String(val));labelEl.textContent=it?it.label:'';};
+  paint();
+  try{Object.defineProperty(trigger,'value',{get:()=>val,set:v=>{val=String(v);paint();},configurable:true});}catch(_){}
+  let menu=null,teardown=null;
+  const close=()=>{if(teardown){teardown();teardown=null;}if(menu){menu.remove();menu=null;}trigger.setAttribute('aria-expanded','false');};
+  const choose=it=>{val=String(it.value);paint();close();opts.onChange&&opts.onChange(it.value);};
+  const open=()=>{
+    if(menu){close();return;}
+    menu=el('div',{class:'ddmenu',role:'listbox'});
+    items.forEach(it=>menu.append(el('div',{class:'dditem'+(String(it.value)===String(val)?' on':''),role:'option',onclick:()=>choose(it)},it.label)));
+    document.body.append(menu);
+    const r=trigger.getBoundingClientRect();
+    menu.style.minWidth=Math.max(r.width,150)+'px';
+    // align the menu's item TEXT with the trigger's label: the menu has its own inner padding, so shift
+    // left by that padding (item text sits at menu.left + menuPad + itemPad; trigger text at left + itemPad).
+    const padL=parseFloat(getComputedStyle(menu).paddingLeft)||0;
+    menu.style.left=Math.max(8,Math.min(r.left-padL,window.innerWidth-menu.offsetWidth-8))+'px';
+    const mh=menu.offsetHeight,below=window.innerHeight-r.bottom;
+    menu.style.top=((below<mh+12&&r.top>mh+12)?(r.top-mh-5):(r.bottom+5))+'px';
+    trigger.setAttribute('aria-expanded','true');
+    const onDoc=e=>{if(menu&&!menu.contains(e.target)&&!trigger.contains(e.target))close();};
+    const onKey=e=>{if(e.key==='Escape')close();};
+    setTimeout(()=>{document.addEventListener('mousedown',onDoc,true);document.addEventListener('keydown',onKey,true);window.addEventListener('scroll',close,true);window.addEventListener('resize',close);},0);
+    teardown=()=>{document.removeEventListener('mousedown',onDoc,true);document.removeEventListener('keydown',onKey,true);window.removeEventListener('scroll',close,true);window.removeEventListener('resize',close);};
+  };
+  trigger.onclick=e=>{e.preventDefault();if(!trigger.disabled)open();};
+  return trigger;
+}
+let personas=null;
+async function refreshPersonas(){
+  try{ const j=await(await fetch('/api/script-personas?channel='+encodeURIComponent(CH))).json(); j._channel=CH; personas=j; if(activeTab==='script')render(); }catch(_){}
+}
+// 🎭 Pick the narration voice before generating (persists to the script decision; drives generate-script).
+function personaBox(st){
+  const dec=st.decision=st.decision||{};
+  const ready=personas&&personas._channel===CH;
+  const list=(ready&&personas.list)||[];
+  const cur=dec.persona||(ready&&personas.default)||(list[0]&&list[0].id);
+  const wrap=el('div',{class:'lenbox'});
+  let sel;
+  if(!ready){ sel=dropdown({cls:'lensel',disabled:true,options:[{value:'',label:'loading…'}]}); refreshPersonas(); }
+  else sel=dropdown({value:cur,cls:'lensel',options:list.map(p=>({value:p.id,label:p.name})),onChange:v=>{dec.persona=v;queueSave();render();}});
+  wrap.append(el('div',{class:'lenrow'},el('span',{class:'lenlabel'},'🎭 Script persona'),sel,el('span',{class:'est',style:'color:var(--muted)'},'the voice the narration is written in')));
+  const pick=list.find(x=>x.id===cur);
+  if(pick&&pick.blurb)wrap.append(el('div',{class:'lenstat'},pick.blurb));
+  return wrap;
+}
+async function deepResearch(){
+  showToast('🔬 Deep research running — live web search → research-brief + sources. A few minutes; leave the tab open.',5000);
+  try{ const j=await(await fetch('/api/research?channel='+encodeURIComponent(CH)+'&id='+encodeURIComponent(ID),{method:'POST',headers:{'Content-Type':'application/json'},body:'{}'})).json();
+    showToast((j.isError?'⚠ ':'✓ ')+(j.reply||'done'),8000);
+  }catch(e){ showToast('⚠ '+e,5000); }
+}
 function scriptPanel(st){
   const p=el('div',{class:'panel active'});
   p.append(el('h2',{class:'stage'},'Script'));
   const cand=st.candidates;
+  p.append(scriptLengthBox(st));
+  p.append(personaBox(st));
   if(scriptGenerating){
-    p.append(el('div',{class:'locked',style:'padding:34px'},el('div',{html:'<div style="font-size:28px">✍️ ⏳</div><b>Researching + writing the script…</b><br>This takes a few minutes — leave this tab open and the draft appears here automatically.'})));
+    const pct=Math.max(2,Math.min(100,scriptPct||2));
+    const box=el('div',{class:'locked',style:'padding:30px 34px'});
+    box.append(el('div',{html:'<div style="font-size:28px">✍️ ⏳</div><b>Researching + writing the script…</b><br><span class="sub" style="font-size:12.5px">Web research → fact-check → draft. A few minutes — leave this tab open, the draft appears automatically.</span>'}));
+    const bar=el('div',{class:'progbar indet',style:'margin-top:14px'});bar.append(el('i',{style:'width:'+pct+'%'}));box.append(bar);
+    box.append(el('div',{class:'est',style:'margin-top:7px'},pct>=100?'Finishing…':'Estimated — research has no fixed checkpoints'));
+    p.append(box);
     return p;
   }
   if(!cand||!cand.script){
     p.append(el('p',{class:'sub'},'Research the topic, fact-check it, and draft the full script to the channel standards — hook in the first 5s, retention beats, a payoff that delivers the locked title.'));
     p.append(el('button',{class:'btn accent big',onclick:generateScript},'✍️ Research & write the script'));
+    p.append(el('div',{class:'est',style:'margin:11px 0 3px'},'Optional — run a DEEPER, separately-sourced research pass first (live web search → 01-research/research-brief.md + sources.md). The script step then builds on it instead of researching from scratch.'));
+    p.append(el('button',{class:'btn',onclick:deepResearch},'🔬 Deep research first'));
+    p.append(el('div',{class:'est',style:'margin-top:10px'},'Generated once but the draft never showed up? If the run was interrupted after writing 02-script/script.md, recover that draft here — no need to regenerate.'));
+    p.append(el('button',{class:'btn sm',style:'margin-top:4px',onclick:recoverScript},'⤵ Recover from script.md'));
     checkScriptRunning();
     return p;
   }
@@ -1319,7 +1651,7 @@ function startIdeasPoll(){
     try{
       const d2=await(await fetch('/api/video?channel='+encodeURIComponent(CH)+'&id='+encodeURIComponent(ID))).json();
       const s=d2.stages&&d2.stages.idea, c=s&&s.candidates;
-      if(c&&((c.ideas&&c.ideas.length)||c.statement)){doc=d2;ideasGenerating=false;stopIdeasPoll();if(activeTab==='idea')render();showToast('✓ Ideas ready.',5000);}
+      if(c&&((c.ideas&&c.ideas.length)||c.statement)){adoptDoc(d2);ideasGenerating=false;stopIdeasPoll();if(activeTab==='idea')render();showToast('✓ Ideas ready.',5000);}
     }catch(_){}
   },5000);
 }
@@ -1335,6 +1667,20 @@ async function checkIdeasRunning(){
 /* ---------- SHORTS LAB (mine the finished video for viral clips) ---------- */
 let shortsGenerating=false, shortsPollTimer=null, shortsChecked=false;
 let shortsStat=null, shortsStatAt=0, shortsStatBusy=false, shortsRenderTimer=null;
+// Multi-platform distribution kit (per-clip captions for YouTube/TikTok/Instagram). Fetched ONCE
+// per video and cached keyed by video id; a re-render is triggered when it arrives.
+let shortsDist=null, shortsDistKey='', shortsDistBusy=false, coveringClips={};
+function ensureShortsDist(){
+  const key=CH+'|'+ID;
+  if(shortsDistKey===key&&shortsDist!==null)return;     // already loaded for this video
+  if(shortsDistBusy&&shortsDistKey===key)return;        // in flight
+  shortsDistBusy=true; shortsDistKey=key;
+  fetch('/api/shorts-distribution?channel='+encodeURIComponent(CH)+'&id='+encodeURIComponent(ID))
+    .then(r=>r.json()).then(j=>{
+      shortsDist={}; ((j&&j.clips)||[]).forEach(c=>{shortsDist[c.id]=c;});
+      shortsDistBusy=false; if(activeTab==='shorts')render();
+    }).catch(_=>{shortsDistBusy=false;});
+}
 function shortsPanel(st){
   const p=el('div',{class:'panel active'});
   p.append(el('h2',{class:'stage'},'Shorts Lab — clip the gold'));
@@ -1362,6 +1708,8 @@ function shortsPanel(st){
   bar.append(el('button',{class:'btn',onclick:()=>{if(confirm('Re-run the whole analysis? Your notes below steer the fresh pass.'))startShortsAnalysis();}},'🔄 Re-analyze'));
   bar.append(el('span',{class:'est'},clips.length+' clips · plan saved to 07-publish/shorts-plan.md · rendered clips land in 05-edit/shorts/'));
   p.append(bar);
+  p.append(publishShortsBar(clips,d));
+  checkShortsUploadRunning(); checkYtConn(); ensureShortsDist();
   clips.forEach((cl,i)=>p.append(clipCard(cl,i)));
   p.append(bignote(d,'notes','Redirections for the next analysis (e.g. “more myth-busting”, “shorter clips”, “skip the intro”)…'));
   return p;
@@ -1373,16 +1721,23 @@ function shortsPanel(st){
     head.append(el('span',{class:'clipname'},cl.title||cl.id));
     const s=cl.scores||{};
     head.append(el('span',{class:'viralchip'},'🔥 '+(cl.viralScore||'?')+'/100'));
+    if(cl.youtube&&cl.youtube.videoId)head.append(el('a',{class:'viralchip',style:'background:var(--ok-soft);border-color:var(--ok);color:var(--ink)',href:cl.youtube.url,target:'_blank',title:'Open on YouTube'},'✓ '+(cl.youtube.privacy||'uploaded')));
     card.append(head);
     card.append(el('div',{class:'clipmeta'},'beats '+cl.fromBeat+'–'+cl.toBeat+' · '+Math.round(cl.durationSec||0)+'s · at '+fmtMS(cl.startSec)+'–'+fmtMS(cl.endSec)+' in the full cut'));
     if(cl.hook)card.append(el('div',{class:'cliphook'},'🎣 “'+cl.hook+'”'));
     if(cl.why)card.append(el('div',{class:'clipwhy'},cl.why));
     card.append(el('div',{class:'clipscores'},'curiosity '+(s.curiosity??'–')+' · shareability '+(s.shareability??'–')+' · standalone '+(s.standalone??'–')+' · visual '+(s.visual??'–')));
     if((cl.shortsTitles||[]).length){
-      card.append(el('div',{class:'colhead',style:'margin:13px 0 2px'},'Title options'));
+      card.append(el('div',{class:'colhead',style:'margin:13px 0 2px'},'Title — pick the one to publish'));
+      d.titles=d.titles||{};
+      const chosen=d.titles[cl.id]||cl.chosenTitle||cl.shortsTitles[0];
       cl.shortsTitles.forEach(t=>{
-        const row=el('div',{class:'titleopt'});
-        row.append(el('span',{},t));
+        const sel=chosen===t;
+        const row=el('div',{class:'titleopt',style:sel?'border-color:var(--accent);background:var(--accent-soft)':''});
+        const lab=el('label',{style:'display:flex;align-items:center;gap:8px;flex:1;cursor:pointer'});
+        lab.append(el('input',{type:'radio',name:'short-title-'+cl.id,...(sel?{checked:'checked'}:{}),onchange:()=>{d.titles[cl.id]=t;queueSave();render();}}));
+        lab.append(el('span',{},t));
+        row.append(lab);
         row.append(el('button',{class:'btn sm',title:'Copy',onclick:()=>copyText(t,'title')},'📋'));
         card.append(row);
       });
@@ -1394,6 +1749,18 @@ function shortsPanel(st){
       if(ov.mid)r.append(el('span',{class:'ovchip'},el('i',{},'mid'),ov.mid));
       if(ov.end)r.append(el('span',{class:'ovchip'},el('i',{},'end'),ov.end));
       card.append(r);
+    }
+    if(cl.thumbPrompt){
+      const r=el('div',{class:'row',style:'margin-top:11px;align-items:center;flex-wrap:wrap'});
+      if(cl.thumbWord)r.append(el('span',{class:'ovchip'},el('i',{},'thumb word'),cl.thumbWord));
+      const box=el('div',{class:'promptBox',style:'display:none'},cl.thumbPrompt);
+      const tg=el('span',{class:'promptToggle'},'🖼️ Thumbnail prompt (9:16, text-free art)');
+      tg.onclick=()=>{box.style.display=box.style.display==='none'?'':'none';};
+      r.append(tg);
+      r.append(el('button',{class:'btn sm',onclick:()=>copyText(cl.thumbPrompt,'thumbnail prompt')},'📋 Prompt'));
+      if(cl.thumbWord)r.append(el('button',{class:'btn sm',onclick:()=>copyText(cl.thumbWord,'punch word')},'📋 Word'));
+      r.append(el('span',{class:'est'},'paste with the cast sheet attached, then add the punch word'));
+      card.append(r,box);
     }
     const ss=cl.shortScript||{};
     if(ss.hook||ss.payoff){
@@ -1409,25 +1776,92 @@ function shortsPanel(st){
       r.append(el('button',{class:'btn sm',onclick:()=>copyText(cl.postCaption,'caption')},'📋 Caption'));
       card.append(r);
     }
+    if(cl.pinnedComment){
+      // Always show/copy the pinned comment WITH the parent video's link — the stored text may not
+      // include it (the URL is only known once the long video is published), so append it here.
+      const longId=doc.youtube&&doc.youtube.videoId;
+      const hasUrl=/youtu\.be\/|youtube\.com\//i.test(cl.pinnedComment);
+      const full=(hasUrl||!longId)?cl.pinnedComment
+        :(cl.pinnedComment.replace(/\s*\(full video on the channel\)\s*$/i,'').replace(/\s*\(link below\)\.?/gi,'').replace(/\s+/g,' ').trim()+'  https://youtu.be/'+longId);
+      const r=el('div',{class:'row',style:'margin-top:8px;align-items:flex-start'});
+      r.append(el('span',{class:'est',style:'flex:1;min-width:200px'},'📌 Pin this comment (funnel → full video): '+full));
+      r.append(el('button',{class:'btn sm accent',onclick:()=>copyText(full,'pinned comment')},'📋 Pin'));
+      card.append(r);
+    }
     card.append(clipRenderArea(cl));
+    card.append(platformKit(cl));
     return card;
+  }
+  function platformKit(cl){
+    const wrap=el('div',{class:'platkit',style:'margin-top:14px;padding-top:13px;border-top:1px dashed var(--line)'});
+    wrap.append(el('div',{class:'colhead',style:'margin:0 0 9px'},'📤 Platform kit'));
+    const dist=shortsDist&&shortsDist[cl.id];
+    if(!dist){
+      wrap.append(el('div',{class:'est'},shortsDistBusy?'⏳ Loading platform captions…':'Platform captions unavailable for this clip.'));
+      return wrap;
+    }
+    // Per-platform captions ----------------------------------------------------------------
+    const caps=dist.captions||{};
+    const platforms=[
+      {key:'youtube',  label:'YouTube Shorts',   short:'YouTube caption'},
+      {key:'tiktok',   label:'TikTok',           short:'TikTok caption'},
+      {key:'instagram',label:'Instagram Reels',  short:'Instagram caption'},
+    ];
+    platforms.forEach(pf=>{
+      const txt=caps[pf.key]||'';
+      const block=el('div',{style:'margin-bottom:9px'});
+      const head=el('div',{class:'row',style:'align-items:center;margin-bottom:3px'});
+      head.append(el('span',{class:'colhead',style:'margin:0;flex:1'},pf.label));
+      head.append(el('button',{class:'btn sm',title:'Copy '+pf.label+' caption',onclick:()=>copyText(txt,pf.short)},'📋'));
+      block.append(head);
+      block.append(el('div',{class:'est',style:'white-space:pre-wrap;line-height:1.5'},txt));
+      wrap.append(block);
+    });
+    if(dist.lengthOK===false)wrap.append(el('div',{class:'est',style:'color:var(--warn,#d98a00)'},'⚠️ trim to ≤90s for Reels'));
+    // Cover still --------------------------------------------------------------------------
+    const fb=cl.file||cl.id;
+    const coverWrap=el('div',{style:'margin-top:11px'});
+    const rendering=!!coveringClips[cl.id];
+    const haveCover=!!cl.coverPath;
+    if(rendering){
+      coverWrap.append(el('div',{class:'est'},'⏳ rendering cover… (~20–40s)'));
+    }else if(haveCover){
+      const cn=fb+'.cover.png';
+      const csrc='/api/short-file?channel='+encodeURIComponent(CH)+'&id='+encodeURIComponent(ID)+'&name='+encodeURIComponent(cn)+'&t='+Date.now();
+      const r=el('div',{class:'row',style:'align-items:flex-start'});
+      r.append(el('img',{src:csrc,style:'width:118px;aspect-ratio:9/16;object-fit:cover;border-radius:10px;border:1px solid var(--line);background:#000;display:block'}));
+      const col=el('div',{style:'display:flex;flex-direction:column;gap:8px;flex:1;min-width:200px'});
+      col.append(el('a',{class:'btn sm',href:csrc,download:cn},'⬇ '+cn));
+      col.append(el('button',{class:'btn sm',onclick:()=>generateShortCover(cl.id)},'🔄 Re-render cover'));
+      col.append(el('span',{class:'est'},'Use this as your TikTok/Reels cover frame. Text is centered so Instagram’s grid crop keeps it.'));
+      r.append(col);
+      coverWrap.append(r);
+    }else{
+      coverWrap.append(el('button',{class:'btn',onclick:()=>generateShortCover(cl.id)},'🖼️ Generate cover'));
+    }
+    wrap.append(coverWrap);
+    // Specs line ---------------------------------------------------------------------------
+    wrap.append(el('div',{class:'est',style:'margin-top:10px'},'1080×1920 · same file works on all 3 · keep ≤90s for Reels · edit hashtags in '+CH+'/_assets/shorts-hashtags.json.'));
+    return wrap;
   }
   function clipRenderArea(cl){
     const wrap=el('div',{style:'margin-top:12px'});
     const stt=shortsStat||{};
-    const rendering=((stt.rendering)||[]).includes(cl.id);
-    const file=((stt.files)||{})[cl.id];
-    const prog=((stt.progress)||{})[cl.id]||{};
+    const fb=cl.file||cl.id;                                  // title-slug filename (fallback to id for old plans)
+    const rendering=((stt.rendering)||[]).includes(fb)||((stt.rendering)||[]).includes(cl.id);
+    const file=((stt.files)||{})[fb]||((stt.files)||{})[cl.id];
+    const prog=((stt.progress)||{})[fb]||((stt.progress)||{})[cl.id]||{};
     if(rendering){
       wrap.append(el('div',{class:'est'},'⏳ Rendering vertical clip… '+(prog.state==='rendering'?(prog.progress||0)+'%':(prog.state||'starting'))));
       const b=el('div',{class:'progbar'});b.append(el('i',{style:'width:'+(prog.progress||2)+'%'}));wrap.append(b);
       ensureShortsRenderPoll();
     } else if(file){
+      const fname=(((stt.files)||{})[fb]?fb:cl.id)+'.mp4';
       const r=el('div',{class:'row'});
-      const src='/api/short-file?channel='+encodeURIComponent(CH)+'&id='+encodeURIComponent(ID)+'&name='+encodeURIComponent(cl.id+'.mp4')+'&t='+file.t;
+      const src='/api/short-file?channel='+encodeURIComponent(CH)+'&id='+encodeURIComponent(ID)+'&name='+encodeURIComponent(fname)+'&t='+file.t;
       r.append(el('video',{class:'shortvid',controls:'controls',preload:'metadata',src}));
       const col=el('div',{style:'display:flex;flex-direction:column;gap:8px'});
-      col.append(el('a',{class:'btn sm',href:src,download:cl.id+'.mp4'},'⬇ '+cl.id+'.mp4'));
+      col.append(el('a',{class:'btn sm',href:src,download:fname},'⬇ '+fname));
       col.append(el('button',{class:'btn sm',onclick:()=>renderShortClip(cl.id)},'🔄 Re-render'));
       col.append(el('span',{class:'est'},Math.round(file.size/1048576)+' MB · 1080×1920'));
       r.append(col);
@@ -1459,7 +1893,7 @@ function startShortsPoll(){
     try{
       const d2=await(await fetch('/api/video?channel='+encodeURIComponent(CH)+'&id='+encodeURIComponent(ID))).json();
       const cl=d2.stages&&d2.stages.shorts&&d2.stages.shorts.candidates&&d2.stages.shorts.candidates.clips;
-      if(cl&&cl.length){doc=d2;shortsGenerating=false;stopShortsPoll();if(activeTab==='shorts')render();showToast('✓ '+cl.length+' clips ranked.',6000);}
+      if(cl&&cl.length){adoptDoc(d2);shortsGenerating=false;stopShortsPoll();if(activeTab==='shorts')render();showToast('✓ '+cl.length+' clips ranked.',6000);}
     }catch(_){}
   },5000);
 }
@@ -1497,16 +1931,142 @@ async function renderShortClip(clipId){
     else{await refreshShortsStat(true);ensureShortsRenderPoll();}
   }catch(e){showToast('⚠ '+e,4000);}
 }
+async function generateShortCover(clipId){
+  if(coveringClips[clipId]){showToast('⏳ Cover already rendering for this clip…',3000);return;}
+  coveringClips[clipId]=true; if(activeTab==='shorts')render();
+  showToast('🖼️ Rendering cover still… ~20–40s.',4000);
+  try{
+    const j=await(await fetch('/api/shorts-cover?channel='+encodeURIComponent(CH)+'&id='+encodeURIComponent(ID),{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id:clipId})})).json();
+    if(j&&j.ok){await load();showToast('✓ Cover ready.',3000);}
+    else showToast('⚠ '+((j&&j.error)||'Cover failed'),5000);
+  }catch(e){showToast('⚠ '+e,4000);}
+  finally{delete coveringClips[clipId]; if(activeTab==='shorts')render();}
+}
+
+/* ---------- SHORTS → YOUTUBE PUBLISH (per-clip title pick + batch upload as private/unlisted/public) ---------- */
+let shortsUp=null, shortsUpTimer=null, shortsUpChecked=false, ytConn=null, ytConnChecked=false;
+let funnelStat=null, funnelStatChecked=false;
+function shortRendered(cl){const f=(shortsStat&&shortsStat.files)||{};const fb=cl.file||cl.id;return !!(f[fb]||f[cl.id]);}
+function publishShortsBar(clips,d){
+  const wrap=el('div',{class:'imgbar',style:'margin:4px 0 16px'});
+  wrap.append(el('b',{},'🚀 Publish Shorts to YouTube'));
+  const rendered=clips.filter(shortRendered);
+  const uploaded=clips.filter(cl=>cl.youtube&&cl.youtube.videoId);
+  const pending=rendered.filter(cl=>!(cl.youtube&&cl.youtube.videoId));
+  wrap.append(el('div',{class:'est'},rendered.length+' of '+clips.length+' rendered · '+uploaded.length+' uploaded · '+pending.length+' ready. Each uploads with its picked title + caption + a link back to the full video, tagged #Shorts.'));
+  if(!ytConn){wrap.append(el('div',{class:'est',style:'margin-top:7px'},'Checking YouTube connection…'));return wrap;}
+  if(!ytConn.connected){
+    wrap.append(el('div',{class:'est',style:'margin-top:7px'},'Connect this channel to YouTube first — use the 📺 button in the top bar.'));
+    return wrap;
+  }
+  d.uploadPrivacy=d.uploadPrivacy||'private';
+  const up=shortsUp||{};
+  const row=el('div',{class:'row',style:'margin-top:9px;align-items:center;gap:9px;flex-wrap:wrap'});
+  row.append(el('span',{class:'est'},'as '+(ytConn.channelTitle||'?')+' · Visibility:'));
+  const psel=dropdown({value:d.uploadPrivacy,cls:'lensel',disabled:up.running,options:['private','unlisted','public'],onChange:v=>{d.uploadPrivacy=v;queueSave();}});
+  row.append(psel);
+  if(up.running){
+    row.append(el('span',{class:'est'},'⏳ Uploading '+(up.done||0)+'/'+(up.total||0)+'…'));
+    ensureShortsUpPoll();
+  } else {
+    const btn=el('button',{class:'btn accent',onclick:()=>publishShorts(d.uploadPrivacy)},pending.length?('🚀 Publish '+pending.length+' Short'+(pending.length===1?'':'s')+' ('+d.uploadPrivacy+')'):'All rendered Shorts uploaded ✓');
+    if(!pending.length)btn.disabled=true;
+    row.append(btn);
+    row.append(el('button',{class:'btn',style:'margin-left:8px',onclick:()=>syncFunnel()},'🔗 Sync funnel (all videos)'));
+    if(!rendered.length)row.append(el('span',{class:'est'},'Render the clips below first.'));
+  }
+  if(funnelStat && funnelStat.needsSync){ row.append(el('div',{class:'est',style:'flex-basis:100%;color:#b4690e'},'⚠️ '+funnelStat.staleShorts+' shorts have stale/inactive funnel links — run Sync funnel.')); }
+  checkFunnelStatus();
+  wrap.append(row);
+  if(up.results&&up.results.length){
+    const box=el('div',{style:'margin-top:9px'});
+    up.results.forEach(r=>box.append(el('div',{class:'est',style:r.videoId?'':'color:var(--warn)'},r.videoId?('✓ '+r.title+' → '+r.url):('⚠ '+(r.title||r.clipId)+': '+(r.error||'failed')))));
+    if(up.quotaHit)box.append(el('div',{class:'est',style:'color:var(--warn)'},'Hit YouTube’s daily upload quota — re-run tomorrow; already-uploaded clips are skipped.'));
+    wrap.append(box);
+  }
+  return wrap;
+}
+async function checkFunnelStatus(){
+  if(funnelStatChecked)return; funnelStatChecked=true;
+  try{ funnelStat=await(await fetch('/api/youtube/funnel-status?channel='+encodeURIComponent(CH))).json(); if(activeTab==='shorts')render(); }catch(_){}
+}
+async function publishShorts(privacy){
+  showToast('🚀 Publishing Shorts to YouTube…',2500);
+  try{
+    const j=await(await fetch('/api/youtube/upload-shorts?channel='+encodeURIComponent(CH)+'&id='+encodeURIComponent(ID),{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({privacy})})).json();
+    if(j.error){showToast('⚠ '+j.error,5000);return;}
+    if(j.total===0){showToast('Nothing to publish — render clips + pick titles first.',4000);return;}
+    shortsUp={running:true,state:'starting',total:j.total,done:0,results:[]};
+    if(activeTab==='shorts')render();
+    ensureShortsUpPoll();
+  }catch(e){showToast('⚠ '+e,4500);}
+}
+async function syncFunnel(){
+  try{
+    showToast('🔗 Syncing funnel links across all videos…',4000);
+    const j=await(await fetch('/api/youtube/sync-shorts-funnel?channel='+encodeURIComponent(CH),{method:'POST',headers:{'Content-Type':'application/json'},body:'{}'})).json();
+    if(j.error){showToast('Sync error: '+j.error,7000);return;}
+    if(j.running){showToast('Sync already running.',4000);}
+    const poll=setInterval(async()=>{
+      try{
+        const s=await(await fetch('/api/youtube/sync-shorts-funnel-status?channel='+encodeURIComponent(CH))).json();
+        if(!s.running){
+          clearInterval(poll);
+          const flagged=(s.videos||[]).filter(v=>v.privateDestination).map(v=>v.id);
+          showToast('✓ Funnel synced: '+(s.fixed||0)+' links fixed across '+((s.videos||[]).length)+' videos'+(flagged.length?(' · ⚠️ private destination: '+flagged.join(', ')):'')+'. Checklist → '+(s.checklist||'_assets/shorts-funnel-checklist.md'),9000);
+          funnelStatChecked=false;checkFunnelStatus();
+        }
+      }catch(_){}
+    },1500);
+  }catch(e){showToast('Sync failed: '+e.message,6000);}
+}
+function ensureShortsUpPoll(){
+  if(shortsUpTimer)return;
+  shortsUpTimer=setInterval(async()=>{
+    try{
+      const j=await(await fetch('/api/youtube/upload-shorts-status?channel='+encodeURIComponent(CH)+'&id='+encodeURIComponent(ID))).json();
+      shortsUp=j;
+      if(!j.running){clearInterval(shortsUpTimer);shortsUpTimer=null;const fin=j;await load();shortsUp=fin;if(activeTab==='shorts')render();showToast('✓ Shorts upload finished ('+(j.done||0)+'/'+(j.total||0)+').',6000);}
+      else if(activeTab==='shorts')render();
+    }catch(_){}
+  },4000);
+}
+async function checkShortsUploadRunning(){
+  if(shortsUpChecked)return; shortsUpChecked=true;
+  try{const j=await(await fetch('/api/youtube/upload-shorts-status?channel='+encodeURIComponent(CH)+'&id='+encodeURIComponent(ID))).json();
+    if(j.running){shortsUp=j;ensureShortsUpPoll();if(activeTab==='shorts')render();}
+  }catch(_){}
+}
+async function checkYtConn(){
+  if(ytConnChecked)return; ytConnChecked=true;
+  try{ytConn=await(await fetch('/api/youtube/status?channel='+encodeURIComponent(CH))).json();if(activeTab==='shorts')render();}catch(_){ytConn={connected:false};}
+}
 
 /* ---------- THUMBNAIL WIREFRAME ENGINE ----------
    A concept is a compact, structured layout spec — NOT hand-drawn SVG. The Studio renders it into a
    clean composition wireframe (real headline type + branded background + a labeled subject placeholder)
    that reads at 120×68 and feeds the Gemini final-art prompt precisely. Old hand-authored `svg` still
    renders via the fallback in thumbCard. */
-const CAST_COLORS={
+// Built-in seed colors (the default cast). The SELECTED channel's cast.json colors are merged in by
+// loadCastColors() so the thumbnail wireframe tints each head correctly per channel (Cole/Vance/Hawk/
+// a different cast per channel, etc.); names without a color, or from a per-video custom sheet, draw neutral.
+const CAST_COLORS_BUILTIN={
   Max:{skin:'#f2c6a0',hair:'#6e3f1c'}, Luna:{skin:'#f4cda3',hair:'#e7c24c'},
   Zed:{skin:'#b9794a',hair:'#2f2a26'}, Nova:{skin:'#e0b48c',hair:'#9aa0ab'}
 };
+let CAST_COLORS=Object.assign({}, CAST_COLORS_BUILTIN);
+async function loadCastColors(){
+  const map=Object.assign({}, CAST_COLORS_BUILTIN);
+  const slugs=['__default'];
+  if(sheetInfo&&sheetInfo.active&&sheetInfo.active!=='__default')slugs.push(sheetInfo.active);
+  for(const slug of slugs){
+    try{
+      const j=await(await fetch('/api/cast?channel='+encodeURIComponent(CH)+'&slug='+encodeURIComponent(slug))).json();
+      (j.roster||[]).forEach(c=>{ if(c&&c.color&&(c.color.skin||c.color.hair)) map[c.name]={skin:c.color.skin||'#e7d9c4',hair:c.color.hair||'#8a8f9c'}; });
+    }catch(_){}
+  }
+  CAST_COLORS=map;
+}
 const BG_PRESETS={
   sky:['#bfe6f7','#7cc1ea'], dawn:['#ffd9a3','#ff9e7a'], sunset:['#ffb24a','#e85b8a'],
   ember:['#3a2233','#7a2e3a'], night:['#1d2740','#33486f'], ocean:['#34435f','#1f5673'],
@@ -1598,9 +2158,16 @@ function drawHeadlineOverlay(L){
 function packagingPanel(st){
   const c=st.candidates||{},d=dec('packaging');
   d.titleNotes=d.titleNotes||{};d.thumbNotes=d.thumbNotes||{};d.thumbFeedback=d.thumbFeedback||{};d.abTitles=d.abTitles||[];d.customTitles=d.customTitles||[];
+  // Pre-select the generator's recommended primary + distinct A/B as defaults (operator can browse + change).
+  if(!d.primaryTitle && c.recommendedPrimary && (c.titles||[]).some(t=>t.id===c.recommendedPrimary)){
+    d.primaryTitle=c.recommendedPrimary;
+    if(c.recommendedAB && c.recommendedAB!==c.recommendedPrimary && (c.titles||[]).some(t=>t.id===c.recommendedAB) && !d.abTitles.includes(c.recommendedAB)) d.abTitles.push(c.recommendedAB);
+    queueSave();
+  }
   const p=el('div',{class:'panel active'});
   p.append(el('h2',{class:'stage'},'Packaging — pick the promise'));
   p.append(el('p',{class:'sub'},'This comes BEFORE the script. Choose the title + thumbnail you would actually click. Mark a primary, tick 2–3 for an A/B test, add your own, leave notes. Everything saves itself.'));
+  p.append(castStrip());   // surface the cast BEFORE thumbnails are built
   if(packagingGenerating){
     p.append(el('div',{class:'locked',style:'padding:34px'},el('div',{html:'<div style="font-size:28px">🏷️ ⏳</div><b>Writing title candidates for your idea…</b><br>About a minute — they appear here automatically.'})));
     checkPackagingRunning(); return p;
@@ -1617,6 +2184,7 @@ function packagingPanel(st){
 
   /* titles */
   const left=el('div',{});left.append(el('p',{class:'colhead'},'Titles · pick a primary ◉ · tick A/B ▥'));
+  if(c.abRationale) left.append(el('div',{class:'est',style:'margin:2px 0 8px;color:#7a6a55'},'A/B suggestion: '+c.abRationale));
   const titleList=el('div',{});
   const allTitles=()=>[...(c.titles||[]),...d.customTitles.map(t=>({...t,custom:true}))];
   function paintTitles(){
@@ -1657,15 +2225,16 @@ function packagingPanel(st){
   if(d.chosenThumbnail||((c.finalThumbs||[]).length)){
     const ft=el('div',{class:'gate',style:'margin-top:10px'});
     ft.append(el('h3',{},'🖼️ Final thumbnail art'));
-    ft.append(el('p',{class:'thumbwhy',style:'margin:.2em 0 .6em'},'Turns the picked wireframe into real on-brand art (cast sheet + exact hook text; the per-video adapted cast if you set one), saved to 00-packaging/thumbnails/. ~$0.04 per variant — generates 3 distinct takes to A/B.'));
+    ft.append(el('p',{class:'thumbwhy',style:'margin:.2em 0 .6em'},'Turns the picked wireframe into real on-brand art (cast sheet + exact hook text; the per-video adapted cast if you set one), saved to 00-packaging/thumbnails/. Rendered on Gemini 3 Pro (“Nano Banana Pro”) for crisp text + composition — ~$0.13 for one HQ take. Not happy with it? Hit regenerate (or add a note) for another.'));
     const st2=el('div',{class:'est'});
     const btn=el('button',{class:'btn accent',onclick:async function(){
       if(!hasGeminiKey){showToast('Add your Gemini key first (Scenes tab)',3200);return;}
-      this.disabled=true;st2.textContent='🎨 Painting 3 takes… (~30–60s each)';
-      try{const j=await(await fetch('/api/generate-thumbnail?channel='+encodeURIComponent(CH)+'&id='+encodeURIComponent(ID),{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({variants:3,note:d.thumbNotes&&d.thumbNotes[d.chosenThumbnail]||''})})).json();
+      if(!castGuard('Paint the final thumbnail art'))return;
+      this.disabled=true;st2.textContent='🎨 Painting the final art… (~30–60s)';
+      try{const j=await(await fetch('/api/generate-thumbnail?channel='+encodeURIComponent(CH)+'&id='+encodeURIComponent(ID),{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({variants:1,note:d.thumbNotes&&d.thumbNotes[d.chosenThumbnail]||''})})).json();
         st2.textContent=j.error?('⚠ '+j.error):('✓ '+(j.reply||'done'));await load();
       }catch(e){st2.textContent='⚠ '+e;}this.disabled=false;
-    }},(c.finalThumbs||[]).length?'🔄 Regenerate final art (3 variants)':'🎨 Generate final art (3 variants)');
+    }},(c.finalThumbs||[]).length?'🔄 Regenerate final art':'🎨 Generate final art');
     ft.append(btn,st2);
     if((c.finalThumbs||[]).length){
       const chosenConcept=(c.thumbnails||[]).find(t=>t.id===d.chosenThumbnail);
@@ -1684,6 +2253,7 @@ function packagingPanel(st){
         g.append(card);});
       ft.append(g);
       ft.append(el('p',{class:'thumbwhy',style:'margin:.5em 0 0'},'The illustration is generated text-free; the headline is overlaid from your concept so it’s always spelled correctly. Export the composite from CapCut, or use the art + your own title layer.'));
+      ft.append(overlayControls(c,chosenConcept));
     }
     p.append(ft);
   }
@@ -1744,6 +2314,63 @@ function packagingPanel(st){
     w.append(el('h3',{},'None of these? Re-aim 🎯'));
     w.append(el('p',{class:'thumbwhy',style:'margin:.2em 0 .5em'},'Say which way to go — style, colors, the one element you liked. I’ll regenerate a fresh, more diverse batch built for your title.'));
     w.append(el('textarea',{class:'bignote',style:'min-height:54px',placeholder:'e.g. “bolder, less text, lean into the lone raft, warmer colors…”',oninput:e=>{d.reaimNote=e.target.value;queueSave();}},d.reaimNote||''));
+    return w;
+  }
+  // Cheap, Gemini-FREE headline re-overlay over the saved text-free art: re-word the hook / swap
+  // accent / side / font, then re-run JUST render/thumb.mjs (POST /api/thumbnail-overlay → reload).
+  function overlayControls(c,chosenConcept){
+    const meta=c.finalThumbMeta||{};
+    const ACCENTS=[['Blue','#2F6BFF'],['Orange','#FF7A1A'],['Green','#22C55E'],['Yellow','#FFD21A']];
+    // working state — seeded from saved meta, else the chosen concept, else sensible defaults
+    let hook=String(meta.hook!=null?meta.hook:(chosenConcept&&(chosenConcept.hook||(chosenConcept.layout&&Array.isArray(chosenConcept.layout.text)&&chosenConcept.layout.text.map(t=>(typeof t==='string'?t:(t&&t.line))||'').join(' ').trim())))||'').trim();
+    let accent=(/^#?[0-9a-f]{6}$/i.test(String(meta.accent||''))?meta.accent:(chosenConcept&&chosenConcept.accent))||'#FF7A1A';
+    let side=(meta.side==='left'||meta.side==='right')?meta.side:'right';
+    let font=(meta.font==='bebas'||meta.font==='archivo')?meta.font:'anton';
+    const w=el('div',{class:'gate',style:'margin-top:8px'});
+    w.append(el('h3',{},'↻ Re-word the headline (free)'));
+    w.append(el('p',{class:'thumbwhy',style:'margin:.2em 0 .6em'},'Re-runs JUST the title overlay over the saved art — no Gemini, no cost. Change the hook, accent, side or font and update. Takes ~20–40s (Remotion still render).'));
+    // Hook text
+    const hookInp=el('input',{maxlength:'24',placeholder:'Headline text…',value:hook,style:'width:100%;max-width:340px',oninput:e=>{hook=e.target.value;}});
+    w.append(el('div',{class:'sbfield',style:'margin-bottom:8px'},el('label',{},'Hook'),hookInp));
+    // Accent swatches
+    const swatchRow=el('div',{class:'row',style:'gap:6px;align-items:center;margin-bottom:8px'});
+    swatchRow.append(el('label',{style:'min-width:54px'},'Accent'));
+    const swatchBtns=[];
+    ACCENTS.forEach(([name,hex])=>{
+      const b=el('button',{class:'btn sm',title:name,style:'background:'+hex+';color:#fff;border:2px solid '+(accent.toLowerCase()===hex.toLowerCase()?'#111':'transparent')+';min-width:56px',
+        onclick:()=>{accent=hex;swatchBtns.forEach(([bb,hh])=>bb.style.borderColor=(hh.toLowerCase()===accent.toLowerCase()?'#111':'transparent'));}},name);
+      swatchBtns.push([b,hex]); swatchRow.append(b);
+    });
+    w.append(swatchRow);
+    // Side toggle
+    const sideRow=el('div',{class:'row',style:'gap:6px;align-items:center;margin-bottom:8px'});
+    sideRow.append(el('label',{style:'min-width:54px'},'Side'));
+    const sideBtns={};
+    [['left','Left'],['right','Right']].forEach(([v,lab])=>{
+      const b=el('button',{class:'btn sm'+(side===v?' accent':''),onclick:()=>{side=v;Object.entries(sideBtns).forEach(([k,bb])=>bb.className='btn sm'+(k===side?' accent':''));}},lab);
+      sideBtns[v]=b; sideRow.append(b);
+    });
+    w.append(sideRow);
+    // Font toggle
+    const fontRow=el('div',{class:'row',style:'gap:6px;align-items:center;margin-bottom:8px'});
+    fontRow.append(el('label',{style:'min-width:54px'},'Font'));
+    const fontBtns={};
+    [['anton','Anton'],['archivo','Archivo'],['bebas','Bebas']].forEach(([v,lab])=>{
+      const b=el('button',{class:'btn sm'+(font===v?' accent':''),onclick:()=>{font=v;Object.entries(fontBtns).forEach(([k,bb])=>bb.className='btn sm'+(k===font?' accent':''));}},lab);
+      fontBtns[v]=b; fontRow.append(b);
+    });
+    w.append(fontRow);
+    // Update button
+    const status=el('span',{class:'cap',style:'margin-left:8px'});
+    const upd=el('button',{class:'btn accent',onclick:async function(){
+      this.disabled=true;status.textContent='⏳ updating… (~20–40s)';
+      try{
+        const j=await(await fetch('/api/thumbnail-overlay?channel='+encodeURIComponent(CH)+'&id='+encodeURIComponent(ID),{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({hook,accent,side,font})})).json();
+        if(j&&j.ok){status.textContent='✓ updated';await load();}
+        else{status.textContent='⚠ '+((j&&j.error)||'failed');this.disabled=false;}
+      }catch(e){status.textContent='⚠ '+e;this.disabled=false;}
+    }},'↻ Update text (free)');
+    w.append(el('div',{class:'row',style:'align-items:center'},upd,status));
     return w;
   }
 }
@@ -1845,18 +2472,34 @@ function scenesPanel(st){
   p.append(el('h2',{class:'stage'},'Scenes & images'));
   const cand=st.candidates;
   if(scenesGenerating){
-    p.append(el('div',{class:'locked',style:'padding:34px'},el('div',{html:'<div style="font-size:28px">🎬 ⏳</div><b>Breaking the narration into shots + writing an image prompt for each beat…</b><br>A couple of minutes — leave this open, it appears here automatically.'})));
+    const pr=scenesProg||{};
+    const pct=Math.max(3,Math.min(100,Math.round((pr.coverage||0)*100)));
+    const phaseLabel={full:'Storyboarding the whole script…',continue:'Topping up the back half…',importing:'Importing beats…',done:'Finishing…'}[pr.phase]||'Breaking the narration into shots…';
+    const passInfo=(pr.phase==='continue'&&pr.pass)?(' · top-up pass '+pr.pass+'/'+(pr.passes||3)):'';
+    const box=el('div',{class:'locked',style:'padding:30px 34px'});
+    box.append(el('div',{html:'<div style="font-size:28px">🎬 ⏳</div><b>'+phaseLabel+'</b>'+passInfo+'<br><span class="sub" style="font-size:12.5px">An image prompt per beat. Leave this open — it appears here automatically.</span>'}));
+    const indet=!(pr.beats>0);   // the full pass writes the whole CSV at the END — there's no incremental % until beats land, so show an animated bar instead of a frozen 3%
+    const bar=el('div',{class:'progbar'+(indet?' indet':''),style:'margin-top:14px'});bar.append(indet?el('i'):el('i',{style:'width:'+pct+'%'}));box.append(bar);
+    box.append(el('div',{class:'est',style:'margin-top:7px'}, indet
+      ? 'Working… the first pass storyboards the ENTIRE script in one go, so the bar holds here with no jumps for several minutes (slower if other Claude sessions are open). The beats appear all at once when it lands.'
+      : (pr.beats||0)+' beats · '+pct+'% of the script covered'));
+    box.append(el('div',{class:'est',style:'margin-top:10px'},
+      'Stuck here? ',
+      el('a',{href:'#',style:'color:var(--accent)',onclick:e=>{e.preventDefault();recheckScenesStuck();}},'re-check the server')));
+    p.append(box);
     return p;
   }
   if(!cand||!cand.scenes||!cand.scenes.length){
     p.append(el('p',{class:'sub'},'Segment the narration into beats — one standalone image per beat, held while its narration plays, then a cut to a new image when the content moves on. Hold times vary with the content; the image count emerges from the script (no fixed cadence).'));
-    p.append(el('button',{class:'btn accent big',onclick:generateScenes},'🎬 Generate scenes & image prompts'));
+    p.append(castStrip());   // scene prompts reference the cast — confirm the sheet first
+    p.append(el('button',{class:'btn accent big',onclick:()=>{if(castGuard('Generate the scene list'))generateScenes();}},'🎬 Generate scenes & image prompts'));
     checkScenesRunning();
     return p;
   }
   const scenes=cand.scenes;
   const totalSec=cand.totalSeconds||scenes.reduce((a,s)=>a+(+s.seconds||0),0);
   const made=scenes.filter(s=>s.imagePath).length;
+  const _lb=scenesLengthBanner(totalSec/60); if(_lb)p.append(_lb);
 
   const hdr=el('div',{class:'scenehdr'});
   hdr.append(el('p',{class:'sub',style:'margin:0;flex:1;min-width:240px'},
@@ -1868,6 +2511,8 @@ function scenesPanel(st){
   hdr.append(vt);
   p.append(hdr);
 
+  p.append(castStrip());   // which cast every image below uses — change it before generating
+  p.append(captionStylePanel());   // 🎨 caption look (font/color) — drives render + the overlays below
   p.append(imageToolbar(scenes));
   p.append(narrationToolbar(scenes));
   p.append(musicToolbar());
@@ -1886,6 +2531,7 @@ function scenesPanel(st){
     list.append(sceneCard(s,i));
   });
   p.append(list);
+  p.append(endCardPanel());   // 🎬 the auto-appended outro — preview it on demand
 
   const dec=st.decision=st.decision||{};
   p.append(el('div',{class:'colhead',style:'margin-top:22px'},'Re-segment the whole video'));
@@ -1896,6 +2542,25 @@ function scenesPanel(st){
 }
 
 /* ---------- QC & PUBLISH (deterministic Definition-of-Done linter + publish kit + costs) ---------- */
+async function loadPublishKitInto(view){
+  view.innerHTML='';
+  const url=(name)=>'/api/publish-file?channel='+encodeURIComponent(CH)+'&id='+encodeURIComponent(ID)+'&name='+name+'&t='+Date.now();
+  let kit=''; try{ const r=await fetch(url('publish-kit.md')); if(r.ok)kit=await r.text(); }catch(_){}
+  if(!kit){ view.append(el('div',{class:'est'},'No publish kit yet — click “Generate / refresh publish kit”.')); return; }
+  let desc='',trans=''; try{ const r=await fetch(url('description.txt')); if(r.ok)desc=await r.text(); }catch(_){}
+  try{ const r=await fetch(url('transcript.txt')); if(r.ok)trans=await r.text(); }catch(_){}
+  const tags=((kit.match(/##\s*Tags\s*\n([^\n]+)/i)||[])[1]||'').trim();
+  const pinned=((kit.match(/##\s*Pinned comment\s*\n([\s\S]*?)\n##/i)||[])[1]||'').trim();
+  const row=el('div',{class:'row',style:'gap:6px;flex-wrap:wrap'});
+  if(desc)row.append(el('button',{class:'btn sm',onclick:()=>copyText(desc,'description')},'📋 Description'));
+  if(tags)row.append(el('button',{class:'btn sm',onclick:()=>copyText(tags,'tags')},'📋 Tags'));
+  if(pinned)row.append(el('button',{class:'btn sm',onclick:()=>copyText(pinned,'pinned comment')},'📋 Pinned comment'));
+  if(trans)row.append(el('button',{class:'btn sm',onclick:()=>copyText(trans,'transcript')},'📋 Transcript'));
+  if(trans)row.append(el('a',{class:'btn sm',href:url('transcript.txt'),download:'transcript.txt'},'⬇ transcript.txt'));
+  view.append(row);
+  view.append(el('pre',{class:'kitview'},kit));
+  if(trans){ const d=el('details',{style:'margin-top:8px'}); d.append(el('summary',{style:'cursor:pointer;font-weight:700;font-size:12.5px'},'📜 Full transcript ('+((trans.match(/\S+/g)||[]).length)+' words)')); d.append(el('pre',{class:'kitview'},trans)); view.append(d); }
+}
 function qcPanel(st){
   const p=el('div',{class:'panel active'});
   p.append(el('h2',{class:'stage'},'Pre-publish QC'));
@@ -1913,16 +2578,60 @@ function qcPanel(st){
       box.append(row);});
     const fails=(j.checks||[]).filter(c=>c.level==='fail').length;
     box.append(el('div',{class:'est',style:'margin-top:8px;font-weight:600'},fails?('❌ '+fails+' blocking issue'+(fails>1?'s':'')+' — fix before upload.'):'✅ No blocking issues.'));
+    // cross-video recurring issues (from the QC trend rollup) — nudge toward a generator-level fix
+    if((j.recurring||[]).length){
+      const rb=el('div',{class:'gate',style:'margin-top:12px'});
+      rb.append(el('div',{style:'font-weight:700;margin-bottom:4px'},'📉 Recurring across your videos'));
+      rb.append(el('div',{class:'est',style:'margin-bottom:6px;opacity:.78'},'Checks that miss on 2+ videos — worth fixing at the generator/storyboard level, not one video at a time.'));
+      j.recurring.forEach(r=>{rb.append(el('div',{class:'est'},(r.fail?'❌ ':'⚠️ ')+r.id+' — '+[r.fail?r.fail+' fail':'',r.warn?r.warn+' warn':''].filter(Boolean).join(', ')+' across '+r.videos+' video'+(r.videos>1?'s':'')));});
+      box.append(rb);
+    }
+    // channel-wide: CONTEXT/40_STATE.md's QC column vs each episode's persisted qc-log.json, and its
+    // Rough cut / Final thumb / Shorts columns vs the files on disk — shown on every video's QC tab
+    // (not just the stale one) so this drift can't hide behind whichever episode a fresh-eyes sweep
+    // happens to land on.
+    if((j.stateDrift||[]).length){
+      const sb=el('div',{class:'gate',style:'margin-top:12px'});
+      sb.append(el('div',{style:'font-weight:700;margin-bottom:4px'},'🗂️ 40_STATE.md drift'));
+      sb.append(el('div',{class:'est',style:'margin-bottom:6px;opacity:.78'},'CONTEXT/40_STATE.md\'s video table disagrees with a persisted qc-log.json or the files on disk — resync the table.'));
+      j.stateDrift.forEach(m=>{sb.append(el('div',{class:'est'},'⚠️ '+m.detail));});
+      box.append(sb);
+    }
   }catch(e){box.innerHTML='';box.append(el('div',{class:'est'},'⚠ '+e));}})();
-  /* publish kit */
+  /* publish kit — generate + VIEW inline (description, tags, pinned comment, transcript) */
   const pk=el('div',{class:'gate',style:'margin-top:16px'});
   pk.append(el('h3',{},'📦 Publish kit'));
-  pk.append(el('p',{class:'thumbwhy',style:'margin:.2em 0 .6em'},'One click → 07-publish/publish-kit.md + description.txt: description (keyword in the first lines), timestamped chapters from the REAL narration timings, tags, pinned question comment, and the source list lifted from your fact-check.'));
+  pk.append(el('p',{class:'thumbwhy',style:'margin:.2em 0 .6em'},'One click → 07-publish/publish-kit.md + description.txt + transcript.txt: description (keyword-first), timestamped chapters from REAL narration timings, tags, pinned comment, source list, and the full transcript. Read & copy it all right here — no need to open the files.'));
   const out=el('div',{class:'est',style:'margin-top:6px'});
-  pk.append(el('button',{class:'btn accent',onclick:async function(){this.disabled=true;out.textContent='Building…';
+  const view=el('div',{style:'margin-top:10px'});
+  const pkRow=el('div',{style:'display:flex;gap:8px;flex-wrap:wrap;align-items:center'});
+  pkRow.append(el('button',{class:'btn accent',onclick:async function(){this.disabled=true;out.textContent='Building…';
     try{const j=await(await fetch('/api/publish-kit?channel='+encodeURIComponent(CH)+'&id='+encodeURIComponent(ID),{method:'POST'})).json();
-      out.textContent=j.error?('⚠ '+j.error):('✓ Written → '+(j.files||[]).join('  ·  ')+'  ('+j.chapters+' chapters, '+j.sources+' sources)');
-    }catch(e){out.textContent='⚠ '+e;}this.disabled=false;}},'📦 Generate publish kit'),out);
+      out.textContent=j.error?('⚠ '+j.error):('✓ '+(j.chapters)+' chapters · '+(j.sources)+' sources · transcript written');
+      if(!j.error)loadPublishKitInto(view);
+    }catch(e){out.textContent='⚠ '+e;}this.disabled=false;}},'📦 Generate / refresh publish kit'));
+  pkRow.append(el('button',{class:'btn',title:'Build timed English subtitles (.srt + .vtt) from the REAL narration timings → saves to 07-publish/ and downloads the .srt. No YouTube needed.',onclick:async function(){this.disabled=true;out.textContent='Building subtitles…';
+    try{const j=await(await fetch('/api/subtitles?channel='+encodeURIComponent(CH)+'&id='+encodeURIComponent(ID),{method:'POST'})).json();
+      if(j.error){out.textContent='⚠ '+j.error;}
+      else{out.textContent='✓ '+j.reply;const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([j.srt],{type:'text/plain;charset=utf-8'}));a.download='subtitles.en.srt';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),4000);}
+    }catch(e){out.textContent='⚠ '+e;}this.disabled=false;}},'💬 Subtitles (.srt)'));
+  pk.append(pkRow,out);
+  /* 🌍 multi-language captions — translate the English .srt via Gemini (reach lever) */
+  const TLANGS=[['es','Español'],['pt','Português'],['hi','हिन्दी'],['ar','العربية'],['fr','Français'],['de','Deutsch'],['id','Indonesia'],['ja','日本語'],['ru','Русский'],['tr','Türkçe']];
+  const trWrap=el('div',{class:'gate',style:'margin-top:12px'});
+  trWrap.append(el('div',{style:'font-weight:700;margin-bottom:3px'},'🌍 Translate subtitles'));
+  trWrap.append(el('div',{class:'est',style:'margin-bottom:7px;opacity:.8'},'Translate the English captions into other languages (Gemini, ~instant). Saves subtitles.<code>.srt + .vtt to 07-publish/ — upload them as extra caption tracks for big reach. Pick languages:'));
+  const picked=new Set(); const chipRow=el('div',{style:'display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px'});
+  TLANGS.forEach(([code,label])=>{ const chip=el('button',{class:'btn sm',onclick:function(){ if(picked.has(code)){picked.delete(code);this.classList.remove('accent');}else{picked.add(code);this.classList.add('accent');} }},label); chipRow.append(chip); });
+  const trOut=el('div',{class:'est',style:'margin-top:4px'});
+  const trBtn=el('button',{class:'btn',onclick:async function(){ if(!picked.size){trOut.textContent='Pick at least one language.';return;} this.disabled=true; trOut.textContent='Translating '+picked.size+' language(s)… ';
+    try{ const j=await(await fetch('/api/translate-subtitles?channel='+encodeURIComponent(CH)+'&id='+encodeURIComponent(ID),{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({langs:[...picked]})})).json();
+      trOut.textContent=(j.error||j.isError)?('⚠ '+(j.error||'failed')):('✓ '+(j.reply||'done')); }
+    catch(e){trOut.textContent='⚠ '+e;} this.disabled=false; }},'🌍 Translate selected');
+  trWrap.append(chipRow,trBtn,trOut);
+  pk.append(trWrap);
+  pk.append(view);
+  loadPublishKitInto(view);   // show the existing kit on tab open (if already generated)
   p.append(pk);
   /* publish to youtube */
   const yc=el('div',{class:'gate',style:'margin-top:14px'});
@@ -1939,12 +2648,13 @@ function qcPanel(st){
     if(doc.youtube&&doc.youtube.videoId){
       ybox.append(el('div',{html:'Uploaded as <b>'+xesc(doc.youtube.privacy||'private')+'</b> ✓'}),
         el('div',{style:'margin-top:7px'},el('a',{class:'btn sm accent',href:'https://studio.youtube.com/video/'+encodeURIComponent(doc.youtube.videoId)+'/edit',target:'_blank'},'Open in YouTube Studio to publish →')),
-        el('div',{style:'margin-top:8px'},el('button',{class:'btn sm',onclick:()=>startUpload(ybox,'private')},'⬆ Upload again as a new video')));
+        el('div',{class:'row',style:'margin-top:8px'},
+          el('button',{class:'btn sm',onclick:()=>uploadCaptions(ybox),title:'Generate an .srt from the narration timings and (re)upload it as the English caption track'},'💬 Upload English subtitles'),
+          el('button',{class:'btn sm',onclick:()=>startUpload(ybox,'private')},'⬆ Upload again as a new video')));
       return;
     }
-    ybox.append(el('div',{},'Connected to “'+xesc(s.channelTitle||'')+'”. Pushes the rough cut + your locked title, the full description (chapters · sources · music credit), tags, category Education, and the final thumbnail.'));
-    const sel=el('select',{class:'modalsel',style:'width:auto'});
-    [['private','Private — you publish in Studio'],['unlisted','Unlisted'],['public','Public']].forEach(([v,l])=>sel.append(el('option',{value:v},l)));
+    ybox.append(el('div',{},'Connected to “'+xesc(s.channelTitle||'')+'”. Pushes the rough cut + your locked title, the full description (chapters · sources · music credit), tags, category Education, the final thumbnail, and auto-generated English subtitles.'));
+    const sel=dropdown({value:'private',options:[{value:'private',label:'Private — you publish in Studio'},{value:'unlisted',label:'Unlisted'},{value:'public',label:'Public'}]});
     yc.append(el('div',{class:'row',style:'margin-top:10px'},sel,el('button',{class:'btn accent',onclick:()=>startUpload(ybox,sel.value)},'⬆ Upload to YouTube')));
     yc.append(el('p',{class:'thumbwhy',style:'margin:.55em 0 0'},'Note: until your Google project passes YouTube’s API audit, uploads land Private regardless of the choice — you flip it Public in YouTube Studio. That final click doubles as your last review.'));
   })();
@@ -1955,13 +2665,61 @@ function qcPanel(st){
   (async()=>{try{
     const j=await(await fetch('/api/costs?channel='+encodeURIComponent(CH)+'&id='+encodeURIComponent(ID))).json();
     const v=j.video,t=j.total;cbox.innerHTML='';
-    if(v)cbox.append(el('div',{},'This video: '+v.images+' images ≈ $'+v.imagesUsd.toFixed(2)+' · '+v.ttsChars.toLocaleString()+' TTS chars ('+v.ttsCreditPctOfCreator+'% of a Creator month)'));
-    else cbox.append(el('div',{},'No tracked spend on this video yet (ledger starts counting from now).'));
-    if(t)cbox.append(el('div',{style:'margin-top:4px;opacity:.75'},'All videos: '+t.images+' images ≈ $'+t.imagesUsd.toFixed(2)+' · '+t.ttsChars.toLocaleString()+' TTS chars'));
+    const money=n=>'$'+(Number(n)||0).toFixed(2);
+    const imgLine=b=>{const a=[];if(b.flashImages)a.push(b.flashImages+' Flash');if(b.proImages)a.push(b.proImages+' Pro');return a.join(' + ')||'0';};
+    if(v){
+      cbox.append(el('div',{html:'<b>This video — '+money(v.totalUsd)+'</b>'+(v.legacy?' <span style="opacity:.6">(pre-ledger totals)</span>':'')}));
+      cbox.append(el('div',{style:'margin-top:3px'},'🖼 '+imgLine(v)+' images ≈ '+money(v.imagesUsd)+'   ·   🎙 '+(v.ttsChars||0).toLocaleString()+' chars ≈ '+(v.ttsCredits||0).toLocaleString()+' credits ≈ '+money(v.ttsUsd)));
+      if(v.redoUsd>0)cbox.append(el('div',{style:'margin-top:3px;color:var(--warn)'},'↻ '+money(v.redoUsd)+' of that was re-renders / re-voices ('+(v.redoImages||0)+' imgs · '+(v.redoChars||0).toLocaleString()+' chars)'));
+    } else cbox.append(el('div',{},'No tracked spend on this video yet (the itemized ledger starts from now).'));
+    if(t)cbox.append(el('div',{style:'margin-top:8px;opacity:.78'},'All videos: '+money(t.totalUsd)+' · '+imgLine(t)+' images · '+(t.ttsChars||0).toLocaleString()+' TTS chars'+(t.redoUsd>0?' · '+money(t.redoUsd)+' on re-dos':'')));
   }catch(e){cbox.textContent='⚠ '+e;}})();
   return p;
 }
 
+/* Poll-time in-place update: swap only the shot (img/badge/spinner) + audio row of cards whose asset
+   state changed — no innerHTML wipe → no flash / no lost scroll / no collapsed toggles. Returns true if
+   it handled the update; false (e.g. the set of shown cards changed) tells the caller to full-render once. */
+function patchScenes(){
+  const st=doc&&doc.stages&&doc.stages.scenes, scenes=st&&st.candidates&&st.candidates.scenes;
+  if(!scenes||!scenes.length)return false;
+  const grid=document.querySelector('#main .sceneGrid');
+  if(!grid)return false;
+  const shouldShow=s=>scenesView==='all'||s.imagePath;
+  const wantN=scenes.filter(shouldShow).map(s=>String(s.n));
+  const haveN=[...grid.querySelectorAll('.scard[data-scene-n]')].map(c=>c.getAttribute('data-scene-n'));
+  if(wantN.length!==haveN.length||wantN.some((nn,k)=>nn!==haveN[k]))return false;
+  for(const s of scenes){
+    const card=grid.querySelector('.scard[data-scene-n="'+CSS.escape(String(s.n))+'"]');
+    if(card){patchCardShot(card,s);patchCardAudio(card,s);}
+  }
+  return true;
+}
+function patchCardShot(card,s){
+  const shot=card.querySelector('.shot'); if(!shot)return;
+  if(s.imagePath){
+    const src=assetSrc(s); let img=shot.querySelector('img');
+    if(!img){
+      const ph=shot.querySelector('.ph'); if(ph)ph.remove();
+      const todo=shot.querySelector('.badge.todo'); if(todo)todo.remove();
+      const a=el('a',{href:src,target:'_blank',title:'Open full size'}); a.append(el('img',{src,loading:'lazy',alt:'scene '+s.n}));
+      shot.prepend(a);
+      if(!shot.querySelector('.badge.done'))shot.append(el('span',{class:'badge done'},'✓ rendered'));
+    }else if(img.getAttribute('src')!==src){ img.setAttribute('src',src); const link=img.closest('a'); if(link)link.setAttribute('href',src); }
+  }
+  const busy=regenScene.has(s.n), spin=shot.querySelector('.spin');
+  if(busy&&!spin)shot.append(el('div',{class:'spin'},'🖼️ rendering…'));
+  else if(!busy&&spin)spin.remove();
+}
+function patchCardAudio(card,s){
+  const aud=card.querySelector('.audiorow'); if(!aud)return;
+  if(s.audioPath&&!aud.querySelector('audio')){
+    const noaud=aud.querySelector('.noaud'); if(noaud)noaud.remove();
+    aud.prepend(el('span',{class:'audsec'},(s.audioSeconds?'~'+s.audioSeconds+'s':'')));
+    aud.prepend(el('audio',{class:'player',controls:'controls',preload:'none',src:audioSrc(s)}));
+    const vbtn=aud.querySelector('button'); if(vbtn){vbtn.classList.remove('accent');vbtn.textContent=revoiceScene.has(s.n)?'… voicing':'🔁 Re-voice';}
+  }
+}
 function sceneCard(s,i){
   const kind=s.kind||'illustration';
   const isInfo=kind==='infographic';
@@ -1969,7 +2727,7 @@ function sceneCard(s,i){
   let capPos=s.textPos||(capText?'top-center':'none');
   if(!['top-center','center','lower-third','none'].includes(capPos))capPos=capText?'top-center':'none';
   const busy=regenScene.has(s.n);
-  const card=el('div',{class:'scard'+(isInfo?' info':'')});
+  const card=el('div',{class:'scard'+(isInfo?' info':''),'data-scene-n':String(s.n)});
   /* shot — with a LIVE caption overlay so you see where the text lands */
   const shot=el('div',{class:'shot'});
   if(s.imagePath){
@@ -1994,7 +2752,13 @@ function sceneCard(s,i){
     const kindBtn=el('button',{class:'kindchip '+(isInfo?'info':'illus'),title:'Toggle illustration ⇄ infographic (affects how it renders)',
       onclick:()=>{saveScene(s.n,{kind:isInfo?'illustration':'infographic'},true);render();}}, isInfo?'📊 Infographic':'🎨 Illustration');
     top.append(kindBtn);
+    if(!isInfo){
+      const hqBtn=el('button',{class:'kindchip hq'+(s.hq?' on':''),title:s.hq?'HQ ON — renders on Gemini 3 Pro ("Nano Banana Pro"): sharper, better composition (~$0.13 vs $0.04). Click to use standard.':'Standard render. Click for HQ (Gemini 3 Pro) — best for hero/reveal shots (~$0.13).',
+        onclick:()=>{saveScene(s.n,{hq:!s.hq},true);render();}}, s.hq?'✨ HQ on':'✨ HQ');
+      top.append(hqBtn);
+    }
   }
+  if(s.hq&&s.imagePath)shot.append(el('span',{class:'badge hq'},'✨ HQ'));
   (s.characters||[]).forEach(c=>top.append(el('span',{class:'castchip'},c)));
   meta.append(top);
   meta.append(el('div',{class:'narr'}, s.narration?('🎙 '+s.narration):el('span',{class:'empty'},'(no narration on this beat)')));
@@ -2019,10 +2783,9 @@ function sceneCard(s,i){
       if(ov){if(t&&capPos!=='none')ov.textContent=t;else ov.remove();}
       else if(t&&capPos!=='none')shot.append(el('div',{class:'capov cap-'+capPos},t));
       saveScene(s.n,{onScreenText:v});}});
-  const sel=el('select',{class:'txtpos',title:'Where the caption sits',
-    onchange:e=>{saveScene(s.n,{textPos:e.target.value},true);render();}});
-  [['top-center','top-center'],['center','center'],['lower-third','lower-third'],['none','none']].forEach(([v,l])=>
-    sel.append(el('option',{value:v,...(v===capPos?{selected:'selected'}:{})},l)));
+  const sel=dropdown({value:capPos,title:'Where the caption sits',
+    options:[{value:'top-center',label:'top-center'},{value:'center',label:'center'},{value:'lower-third',label:'lower-third'},{value:'none',label:'none'}],
+    onChange:v=>{saveScene(s.n,{textPos:v},true);render();}});
   txtRow.append(ti,sel);
   meta.append(txtRow);
   /* editable image prompt */
@@ -2033,7 +2796,7 @@ function sceneCard(s,i){
   const reBtn=el('button',{class:'btn sm accent',onclick:()=>saveAndRender(s.n,ta.value)}, hasGeminiKey?'💾 Save & re-render':'💾 Save');
   if(busy){reBtn.disabled=true;reBtn.textContent='… rendering';}
   pacts.append(el('button',{class:'btn sm',onclick:()=>copyText(ta.value,'image prompt')},'📋 Copy'),reBtn);
-  wrap.append(ta,el('div',{class:'est',style:'margin-top:4px'},'Edit the prompt, then “Save & re-render” to redo just this shot (~$0.04).'),pacts);
+  wrap.append(ta,el('div',{class:'est',style:'margin-top:4px'},'Edit the prompt, then “Save & re-render” to redo just this shot (~$0.04, or ~$0.13 with ✨ HQ on).'),pacts);
   tog.onclick=()=>{const open=wrap.style.display==='none';wrap.style.display=open?'block':'none';tog.textContent=(open?'▾':'▸')+' edit image prompt';};
   meta.append(tog,wrap);
   /* storyboard (motion / SFX / ambient / music / cast action) */
@@ -2041,8 +2804,7 @@ function sceneCard(s,i){
   const sbTog=el('div',{class:'promptToggle'},'▸ 🎬 storyboard — '+storyboardSummary(s));
   const sbWrap=el('div',{style:'display:none'});
   const grid=el('div',{class:'sbgrid'});
-  const fieldSel=(lab,val,opts,onCh)=>{const f=el('div',{class:'sbfield'});const sel=el('select',{onchange:e=>onCh(e.target.value)});
-    opts.forEach(o=>sel.append(el('option',{value:o,...(o===val?{selected:'selected'}:{})},o||'(none)')));f.append(el('label',{},lab),sel);return f;};
+  const fieldSel=(lab,val,opts,onCh)=>{const f=el('div',{class:'sbfield'});const sel=dropdown({value:val,options:opts.map(o=>({value:o,label:o||'(none)'})),onChange:onCh});f.append(el('label',{},lab),sel);return f;};
   const fieldInp=(lab,val,ph,onIn,wide)=>{const f=el('div',{class:'sbfield'+(wide?' wide':'')});const inp=el('input',{value:val,placeholder:ph,oninput:e=>onIn(e.target.value)});f.append(el('label',{},lab),inp);return f;};
   grid.append(
     fieldSel('🎥 Motion',v.motion,['push-in','push-out','pan-left','pan-right','static'],x=>{saveScene(s.n,{motion:x});sbTog.textContent='▾ 🎬 storyboard — '+storyboardSummary({...s,motion:x});}),
@@ -2083,11 +2845,74 @@ function sceneCard(s,i){
     if(busy)genBtn.disabled=true;
     acts.append(genBtn);
   }
+  if(kind!=='map'){
+    const rp=s.realPhoto;
+    if(rp&&rp.src){
+      const isVid=!!rp.video;
+      acts.append(el('span',{class:'est',style:'color:var(--accent);font-weight:700',title:'This beat renders the REAL '+(isVid?'video':'photo')+' (© '+(rp.photographer||'Pexels')+') as a field-guide plate'},isVid?'🎞️ real ✓':'📷 real ✓'));
+      acts.append(el('button',{class:'btn sm',title:'Fetch a different '+(isVid?'video':'photo')+' for the same query',onclick:()=>isVid?fetchRealVideo(s.n,rp.query):fetchRealPhoto(s.n,rp.query)},'↻'));
+      acts.append(el('button',{class:'btn sm danger',title:'Revert to the AI illustration',onclick:()=>revertRealPhoto(s.n)},'✕ real'));
+    } else {
+      acts.append(el('button',{class:'btn sm',title:'Show a REAL Pexels PHOTO of an actual artifact/site for this beat (renders as a field-guide plate). Artifacts/sites only — sparingly.',onclick:()=>fetchRealPhoto(s.n,rp&&rp.query)},'📷 Real photo'));
+      acts.append(el('button',{class:'btn sm',title:'Show a REAL Pexels VIDEO of an actual artifact/site (a slowly-moving specimen plate — free alternative to Veo). Artifacts/sites only — sparingly.',onclick:()=>fetchRealVideo(s.n,rp&&rp.query)},'🎞️ Real video'));
+    }
+    const mc=s.motionClip;
+    if(mc&&mc.src){
+      acts.append(el('span',{class:'est',style:'color:var(--accent);font-weight:700',title:'This beat renders a Veo motion clip instead of the still'},'🎬 animated ✓'));
+      acts.append(el('button',{class:'btn sm danger',title:'Revert to the still image',onclick:()=>revertMotion(s.n)},'✕ anim'));
+    } else if(s.imagePath && veoEnabled){
+      acts.append(el('button',{class:'btn sm',title:'Animate this still into a few seconds of motion with Veo (slow; uses your Gemini/Veo quota — best on a hero beat)',onclick:()=>animateBeat(s.n)},'🎬 Animate'));
+    }
+  }
   if(capText)acts.append(el('button',{class:'btn sm',onclick:()=>copyText(capText,'caption')},'📋 Caption'));
   acts.append(el('button',{class:'btn sm',onclick:()=>copyText(s.narration||'','narration')},'📋 Narration'));
   meta.append(acts);
   card.append(shot,meta);
   return card;
+}
+// Real-artifact cutaway (Pexels): fetch / re-fetch / revert + a one-time key prompt.
+async function fetchRealPhoto(n,presetQuery){
+  let q=presetQuery;
+  if(!q){ q=prompt('Real artifact/site to show (Pexels search) — e.g. "Otzi iceman mummy", "Lascaux cave paintings":',''); if(q===null)return; q=q.trim(); if(!q)return; }
+  showToast('📷 Fetching a real photo…',2500);
+  try{
+    const j=await(await fetch('/api/fetch-real-photo?channel='+encodeURIComponent(CH)+'&id='+encodeURIComponent(ID),{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({n,query:q})})).json();
+    if(j.error||j.isError){ if(/No Pexels key/i.test(j.error||'')){await promptPexelsKey();} else showToast('⚠ '+(j.error||'failed'),5000); return; }
+    showToast('✓ '+(j.reply||'fetched'),5000); await load();
+  }catch(e){showToast('⚠ '+e,4000);}
+}
+// Real-artifact MOTION cutaway (Pexels video): a free alternative to Veo for a real object/site.
+async function fetchRealVideo(n,presetQuery){
+  let q=presetQuery;
+  if(!q){ q=prompt('Real artifact/site to show as MOVING footage (Pexels video) — e.g. "Lascaux cave paintings", "Stonehenge stones", "glacier ice":',''); if(q===null)return; q=q.trim(); if(!q)return; }
+  showToast('🎞️ Fetching a real video…',3000);
+  try{
+    const j=await(await fetch('/api/fetch-real-video?channel='+encodeURIComponent(CH)+'&id='+encodeURIComponent(ID),{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({n,query:q})})).json();
+    if(j.error||j.isError){ if(/No Pexels key/i.test(j.error||'')){await promptPexelsKey();} else showToast('⚠ '+(j.error||'failed'),5000); return; }
+    showToast('✓ '+(j.reply||'fetched'),5000); await load();
+  }catch(e){showToast('⚠ '+e,4000);}
+}
+async function promptPexelsKey(){
+  const k=prompt('Paste your FREE Pexels API key (get one in 1 min at pexels.com/api):',''); if(!k)return;
+  try{const j=await(await fetch('/api/pexels-key',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({key:k.trim()})})).json();
+    showToast(j.ok?'✓ Pexels key saved — click “Real photo” again.':'⚠ '+(j.error||'could not save'),4000);
+  }catch(e){showToast('⚠ '+e,3000);}
+}
+async function revertRealPhoto(n){
+  try{await fetch('/api/update-scene?channel='+encodeURIComponent(CH)+'&id='+encodeURIComponent(ID),{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({n,patch:{realPhoto:null}})}); await load(); showToast('Reverted to the illustration.',2500);
+  }catch(e){showToast('⚠ '+e,3000);}
+}
+// Veo image→video on a hero beat (slow; the request stays open a few minutes while Veo renders).
+async function animateBeat(n){
+  if(!confirm('Animate beat '+n+' with Veo?\nTurns the still into a few seconds of motion — takes a few minutes and uses your Gemini/Veo quota. Best reserved for hero beats.')) return;
+  showToast('🎬 Animating beat '+n+' with Veo… a few minutes; leave the tab open.',6000);
+  try{ const j=await(await fetch('/api/animate-beat?channel='+encodeURIComponent(CH)+'&id='+encodeURIComponent(ID),{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({n})})).json();
+    if(j.error||j.isError) showToast('⚠ '+(j.error||'failed'),8000); else { showToast('✓ '+(j.reply||'done'),5000); await load(); }
+  }catch(e){ showToast('⚠ '+e,5000); }
+}
+async function revertMotion(n){
+  try{await fetch('/api/update-scene?channel='+encodeURIComponent(CH)+'&id='+encodeURIComponent(ID),{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({n,patch:{motionClip:null}})}); await load(); showToast('Reverted to the still image.',2500);
+  }catch(e){showToast('⚠ '+e,3000);}
 }
 
 /* ---------- shared controls ---------- */
@@ -2155,6 +2980,7 @@ async function regenerate(kind,targetId,note,label){
 }
 async function regenerateAll(){
   if(regenBusy){showToast('⏳ Busy — one at a time.',2500);return;}
+  if(!castGuard('Generate the thumbnail concepts'))return;
   regenBusy=true; showToast('✨ Rebuilding the set from all your hints… (~1–2 min)');
   try{
     const r=await fetch('/api/regenerate-all?channel='+encodeURIComponent(CH)+'&id='+encodeURIComponent(ID),{method:'POST',headers:{'Content-Type':'application/json'},body:'{}'});
@@ -2178,13 +3004,16 @@ async function generatePackaging(){
   packagingGenerating=true; activeTab='packaging'; renderTabs(); render();
   showToast('🏷️ Writing title candidates for the idea… about a minute.');
   startPackagingPoll();
+  let stillRunning=false;
   try{
     const r=await fetch('/api/generate-packaging?channel='+encodeURIComponent(CH)+'&id='+encodeURIComponent(ID),{method:'POST',headers:{'Content-Type':'application/json'},body:'{}'});
     const j=await r.json(); await load();
-    if(j.busy)showToast('Titles were already being written — showing the latest.',4000);
+    // j.busy = a generation is already in flight; KEEP the poll alive so titles appear automatically
+    // when it finishes (otherwise the finally below would stop watching → stale locked panel).
+    if(j.busy){stillRunning=true;showToast('Titles are still being written — they\'ll appear here the moment they\'re ready.',4500);}
     else showToast((j.isError?'⚠ ':'✓ ')+(j.reply||'Titles ready.'),6000);
   }catch(e){showToast('⚠ Error: '+e,5000);}
-  finally{packagingGenerating=false; stopPackagingPoll(); if(activeTab==='packaging')render();}
+  finally{if(!stillRunning){packagingGenerating=false; stopPackagingPoll();} if(activeTab==='packaging')render();}
 }
 function startPackagingPoll(){
   stopPackagingPoll(); let n=0;
@@ -2193,7 +3022,7 @@ function startPackagingPoll(){
     try{
       const d2=await(await fetch('/api/video?channel='+encodeURIComponent(CH)+'&id='+encodeURIComponent(ID))).json();
       const t=d2.stages&&d2.stages.packaging&&d2.stages.packaging.candidates&&d2.stages.packaging.candidates.titles;
-      if(t&&t.length){doc=d2;packagingGenerating=false;stopPackagingPoll();if(activeTab==='packaging')render();showToast('✓ Titles ready — pick your primary.',5500);}
+      if(t&&t.length){adoptDoc(d2);packagingGenerating=false;stopPackagingPoll();if(activeTab==='packaging')render();showToast('✓ Titles ready — pick your primary.',5500);}
     }catch(_){}
   },5000);
 }
@@ -2214,18 +3043,101 @@ async function nextFromPackaging(){
   generateScript();
 }
 let scriptGenerating=false, scriptPollTimer=null, scriptChecked=false;
+
+/* ---------- LENGTH TARGET (the single source of truth for words<->minutes, server-calibrated) ---------- */
+let lenPlan=null;
+async function refreshLen(){
+  if(!CH||!ID){lenPlan=null;return;}
+  try{ lenPlan=await(await fetch('/api/length?channel='+encodeURIComponent(CH)+'&id='+encodeURIComponent(ID))).json(); }
+  catch(_){ lenPlan=null; }
+  if(['script','scenes','qc'].includes(activeTab)) render();
+}
+async function setTarget(minutes){
+  try{
+    const r=await fetch('/api/set-target?channel='+encodeURIComponent(CH)+'&id='+encodeURIComponent(ID),
+      {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({minutes})});
+    if(!r.ok)throw new Error(r.status);
+    lenPlan=await r.json(); if(doc)doc.targetMinutes=lenPlan.targetMinutes;
+    render(); showToast('🎯 Target length set to '+lenPlan.targetMinutes+' min',2500);
+  }catch(e){ showToast('⚠ Could not set target',2500); }
+}
+function targetSelect(){
+  const cur=(lenPlan&&lenPlan.targetMinutes)||(doc&&+doc.targetMinutes)||8.5;
+  const opts=Array.from(new Set([8.5,9,9.5,10,11,12,cur])).sort((a,b)=>a-b);
+  return dropdown({value:String(cur),cls:'lensel',options:opts.map(m=>({value:String(m),label:m+' min'})),onChange:v=>setTarget(+v)});
+}
+// Big readout shown on the Script tab: target picker + how the current draft projects against it.
+function scriptLengthBox(st){
+  const wrap=el('div',{class:'lenbox'});
+  wrap.append(el('div',{class:'lenrow'},el('span',{class:'lenlabel'},'🎯 Target length'),targetSelect(),
+    el('span',{class:'est',style:'color:var(--muted)'},'sets the script word count + the 8:00 floor')));
+  if(lenPlan){
+    const L=lenPlan, wpmTxt=Math.round(L.wpm)+' WPM'+(L.measured?'':' · est');
+    if(L.scriptWords>0){
+      const ok=L.scriptMinutes>=L.targetMinutes-0.3, floorOk=L.scriptMinutes>=8.0;
+      const cls=ok?'good':(floorOk?'warnx':'badx'), icon=ok?'✅':(floorOk?'⚠️':'❌');
+      const gap=Math.max(0,L.targetWords-L.scriptWords);
+      const msg=L.scriptWords+' words → ~'+L.scriptMinutes.toFixed(1)+' min at '+wpmTxt+'. '
+        +(ok?'On target ('+L.targetMinutes+' min).'
+            :'Target '+L.targetMinutes+' min ≈ '+L.targetWords+' words — about '+gap+' more'
+              +(floorOk?'.':'. ⚠ Currently UNDER the 8:00 mid-roll floor.'));
+      wrap.append(el('div',{class:'lenstat '+cls},icon+' '+msg));
+      if(!ok)wrap.append(el('button',{class:'btn sm',style:'margin-top:9px',onclick:()=>extendScript(st)},'✨ Extend to ~'+L.targetMinutes+' min & regenerate'));
+    }else{
+      wrap.append(el('div',{class:'lenstat'},'Voice reads ~'+wpmTxt+'. The script will be written to ~'+L.targetWords+' words ('+L.targetMinutes+' min); hard floor '+L.floorWords+' words (8:00).'));
+    }
+  }
+  return wrap;
+}
+function extendScript(st){
+  const L=lenPlan||{}, dec=st.decision=st.decision||{};
+  dec.notes='The current draft (~'+(L.scriptWords||'?')+' words) is TOO SHORT — it plays only ~'+(L.scriptMinutes||0).toFixed(1)
+    +' min at the voice’s real pace ('+Math.round(L.wpm||165)+' WPM). Expand it to '+(L.targetWords||1500)+'+ spoken words so the finished video is at least '
+    +(L.targetMinutes||8.5)+' minutes and never under 8:00. Keep the existing structure, hook and the parts that work; add real substance (more evidence, a concrete example, a deeper myth-bust, a vivid scene) — never filler or repetition.';
+  showToast('Extending the script…',2000);
+  // the extend note must be ON DISK before the generator (which re-reads decisions server-side)
+  // starts — a debounced queueSave() would still be pending when the server read happens.
+  flushSave().then(generateScript);
+}
+// Compact one-line banner for the Scenes tab: voiced (or estimated) runtime vs target.
+function scenesLengthBanner(estMin){
+  if(!lenPlan)return null;
+  const L=lenPlan, mins=L.voicedMinutes>0?L.voicedMinutes:estMin;
+  const ok=mins>=L.targetMinutes-0.3, floorOk=mins>=8.0;
+  const cls=ok?'good':(floorOk?'warnx':'badx'), icon=ok?'✅':(floorOk?'⚠️':'❌');
+  const moreWords=Math.max(0,Math.ceil((L.targetMinutes*60-mins*60)/60*L.wpm));
+  const msg=(L.voicedMinutes>0?'Voiced ':'Est. ')+mins.toFixed(1)+' min vs '+L.targetMinutes+'-min target ('+Math.round(L.wpm)+' WPM'+(L.measured?'':' est')+'). '
+    +(ok?'On length.':(floorOk?'':'Under the 8:00 mid-roll floor — ')+'add ~'+moreWords+' narration words.');
+  return el('div',{class:'lenstat '+cls,style:'margin:0 0 12px'},icon+' '+msg);
+}
+let scriptStart=0, scriptProgTimer=null, scriptPct=0;
+const SCRIPT_EST_MS=300000;   // ~5 min expected; bar eases toward 90% over this window, snaps to 100% on finish
+function startScriptProg(){ stopScriptProg(); scriptStart=Date.now(); scriptPct=2;
+  scriptProgTimer=setInterval(()=>{ const t=(Date.now()-scriptStart)/SCRIPT_EST_MS; scriptPct=Math.min(90,Math.round(90*(1-Math.exp(-1.6*t)))); if(activeTab==='script'&&scriptGenerating)render(); },1200); }
+function stopScriptProg(snap){ if(scriptProgTimer){clearInterval(scriptProgTimer);scriptProgTimer=null;} if(snap){scriptPct=100; if(activeTab==='script'&&scriptGenerating)render();} }
 async function generateScript(){
   if(scriptGenerating){showToast('⏳ A script is already being written — hang tight, it appears here when done.',3500);return;}
   scriptGenerating=true; activeTab='script'; renderTabs(); render();
   showToast('✍️ Researching + writing the script… this takes a few minutes.');
-  startScriptPoll();
+  startScriptPoll(); startScriptProg();
   try{
     const r=await fetch('/api/generate-script?channel='+encodeURIComponent(CH)+'&id='+encodeURIComponent(ID),{method:'POST',headers:{'Content-Type':'application/json'},body:'{}'});
     const j=await r.json(); await load();
     if(j.busy) showToast('A script was already being written — showing the latest.',4500);
     else showToast((j.isError?'⚠ ':'✓ ')+(j.reply||'Script ready.'),7000);
   }catch(e){showToast('⚠ Error: '+e,5000);}
-  finally{scriptGenerating=false; stopScriptPoll(); if(activeTab==='script')render();}
+  finally{stopScriptProg(true); scriptGenerating=false; stopScriptPoll(); if(activeTab==='script')render();}
+}
+// Recover a script that was written to 02-script/script.md but never synced into studio.json
+// (the headless generator was killed mid-run by inference starvation) — no regeneration needed.
+async function recoverScript(){
+  if(scriptGenerating){showToast('⏳ A script run is in progress — wait for it to finish.',3000);return;}
+  try{
+    const r=await fetch('/api/import-script?channel='+encodeURIComponent(CH)+'&id='+encodeURIComponent(ID),{method:'POST',headers:{'Content-Type':'application/json'},body:'{}'});
+    const j=await r.json();
+    if(j.ok){await load();refreshLen();if(activeTab==='script')render();showToast('✓ Recovered the '+j.words+'-word script from script.md.',6000);}
+    else showToast('⚠ '+(j.error||'Could not recover script.md'),6000);
+  }catch(e){showToast('⚠ Error: '+e,5000);}
 }
 function startScriptPoll(){
   stopScriptPoll(); let n=0;
@@ -2234,7 +3146,7 @@ function startScriptPoll(){
     try{
       const d2=await (await fetch('/api/video?channel='+encodeURIComponent(CH)+'&id='+encodeURIComponent(ID))).json();
       const s=d2.stages&&d2.stages.script;
-      if(s&&s.candidates&&s.candidates.script){doc=d2;scriptGenerating=false;stopScriptPoll();if(activeTab==='script')render();showToast('✓ Script ready.',6000);}
+      if(s&&s.candidates&&s.candidates.script){adoptDoc(d2);stopScriptProg(true);scriptGenerating=false;stopScriptPoll();refreshLen();if(activeTab==='script')render();showToast('✓ Script ready.',6000);}
     }catch(_){}
   },5000);
 }
@@ -2243,10 +3155,10 @@ async function checkScriptRunning(){
   if(scriptChecked||scriptGenerating)return; scriptChecked=true;
   try{
     const j=await (await fetch('/api/status?channel='+encodeURIComponent(CH)+'&id='+encodeURIComponent(ID))).json();
-    if(j.script){scriptGenerating=true;showToast('✍️ A script is already being written for this video…',4000);startScriptPoll();if(activeTab==='script')render();}
+    if(j.script){scriptGenerating=true;showToast('✍️ A script is already being written for this video…',4000);startScriptPoll();startScriptProg();if(activeTab==='script')render();}
   }catch(_){}
 }
-let scenesGenerating=false, scenesPollTimer=null, scenesChecked=false;
+let scenesGenerating=false, scenesPollTimer=null, scenesChecked=false, scenesProg=null;
 async function generateScenes(){
   if(scenesGenerating){showToast('⏳ Scenes are already being generated — hang tight.',3500);return;}
   scenesGenerating=true; activeTab='scenes'; renderTabs(); render();
@@ -2258,19 +3170,41 @@ async function generateScenes(){
     if(j.busy) showToast('Scenes were already being generated — showing the latest.',4500);
     else showToast((j.isError?'⚠ ':'✓ ')+(j.reply||'Scenes ready.'),7000);
   }catch(e){showToast('⚠ Error: '+e,5000);}
-  finally{scenesGenerating=false; stopScenesPoll(); if(activeTab==='scenes')render();}
+  finally{scenesGenerating=false; scenesProg=null; stopScenesPoll(); if(activeTab==='scenes')render();}
 }
 function startScenesPoll(){
-  stopScenesPoll(); let n=0;
+  stopScenesPoll(); let n=0, sawRunning=false;
   scenesPollTimer=setInterval(async()=>{
-    if(++n>80){stopScenesPoll();return;}
+    // Hard safety: never let the loading screen hang forever (~17 min of polling — a big append
+    // with several continue passes can run past 10 min server-side).
+    if(++n>200){scenesGenerating=false;scenesProg=null;stopScenesPoll();if(activeTab==='scenes')render();return;}
+    let running=null;
+    try{ const pj=await (await fetch('/api/generate-scenes/progress?channel='+encodeURIComponent(CH)+'&id='+encodeURIComponent(ID))).json();
+      running=!!pj.running; if(running)sawRunning=true; if(pj.progress)scenesProg=pj.progress;
+      if(activeTab==='scenes'&&scenesGenerating)render(); }catch(_){}
     try{const d2=await (await fetch('/api/video?channel='+encodeURIComponent(CH)+'&id='+encodeURIComponent(ID))).json();
       const s=d2.stages&&d2.stages.scenes;
-      if(s&&s.candidates&&s.candidates.scenes&&s.candidates.scenes.length){doc=d2;scenesGenerating=false;stopScenesPoll();if(activeTab==='scenes')render();showToast('✓ Scenes ready.',6000);}
+      const haveScenes=!!(s&&s.candidates&&s.candidates.scenes&&s.candidates.scenes.length);
+      // Done when scenes exist AND the job is no longer running server-side. The phase==='done'
+      // snapshot is just a fast-path; the running-flag is the robust signal (it survives a missed
+      // progress snapshot / a late poll after a page reload, which is what left the screen stuck).
+      const finished=(scenesProg&&scenesProg.phase==='done')
+                   ||(sawRunning&&running===false)
+                   ||(n>=3&&running===false&&haveScenes);
+      if(haveScenes&&finished){adoptDoc(d2);scenesGenerating=false;scenesProg=null;stopScenesPoll();refreshLen();if(activeTab==='scenes')render();showToast('✓ Scenes ready.',6000);}
+      else if(!haveScenes&&running===false&&n>=3){ // job ended without writing scenes → clear the stuck screen
+        scenesGenerating=false;scenesProg=null;stopScenesPoll();if(activeTab==='scenes')render();}
     }catch(_){}
   },5000);
 }
 function stopScenesPoll(){if(scenesPollTimer){clearInterval(scenesPollTimer);scenesPollTimer=null;}}
+// Manual escape hatch from the loading box: if the server says no job is running, drop the screen.
+async function recheckScenesStuck(){
+  try{const j=await (await fetch('/api/generate-scenes/progress?channel='+encodeURIComponent(CH)+'&id='+encodeURIComponent(ID))).json();
+    if(!j.running){scenesGenerating=false;scenesProg=null;stopScenesPoll();await load();if(activeTab==='scenes')render();showToast('No scene job is running — refreshed.',4000);}
+    else showToast('A scene job is still running on the server — hang tight.',3500);
+  }catch(_){scenesGenerating=false;scenesProg=null;stopScenesPoll();if(activeTab==='scenes')render();}
+}
 async function checkScenesRunning(){
   if(scenesChecked||scenesGenerating)return; scenesChecked=true;
   try{const j=await (await fetch('/api/status?channel='+encodeURIComponent(CH)+'&id='+encodeURIComponent(ID))).json();
@@ -2280,8 +3214,8 @@ async function checkScenesRunning(){
   }catch(_){}
 }
 /* ---------- image generation (Gemini) ---------- */
-let hasGeminiKey=false, imagesGenerating=false, imagesPollTimer=null;
-async function checkKey(){ try{ hasGeminiKey=!!(await (await fetch('/api/key-status')).json()).hasKey; }catch(_){} }
+let hasGeminiKey=false, veoEnabled=false, imagesGenerating=false, imagesPollTimer=null;
+async function checkKey(){ try{ const j=await (await fetch('/api/key-status')).json(); hasGeminiKey=!!j.hasKey; veoEnabled=!!j.veoEnabled; }catch(_){} }
 async function saveKey(k){ k=(k||'').trim(); if(!k){showToast('Paste your key first',2500);return;}
   try{ const j=await (await fetch('/api/set-key',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({key:k})})).json();
     if(j.ok){hasGeminiKey=true;showToast('Gemini key saved ✓',2200);render();} else showToast('⚠ '+(j.error||'could not save'),3000);
@@ -2293,15 +3227,127 @@ async function lockCast(){
     showToast((j.isError?'⚠ ':'✓ ')+(j.reply||j.error||'done'),6000);
   }catch(e){showToast('⚠ '+e,4000);}finally{imagesGenerating=false; if(activeTab==='scenes')render();}
 }
+/* ---------- CAST STRIP: at-a-glance "which cast is this video using", shown on Packaging + Scenes
+   so the sheet decision is visible BEFORE any art (titles → thumbnails → scenes) is generated. ---------- */
+function castStrip(){
+  if(!sheetInfo) return el('span',{});
+  const active=sheetInfo.active||'__default';
+  const sheets=sheetInfo.sheets||[];
+  const isDefault=(active==='__default');
+  const custom=(active==='__custom');
+  const cur=sheets.find(s=>s.slug===active);
+  const title=custom?'This video’s custom sheet':(cur?cur.title:'Default cast');
+  const count=custom?null:(cur?cur.count:null);
+  const adapted=!!(doc&&doc.castAdapt&&doc.castAdapt.note);
+  const t=encodeURIComponent((doc&&doc.updatedAt)||'');
+  const src=custom
+    ? '/api/cast/file?channel='+encodeURIComponent(CH)+'&id='+encodeURIComponent(ID)+'&name=cast-sheet.png&t='+t
+    : ((cur&&cur.hasImage)?'/api/castref?channel='+encodeURIComponent(CH)+'&slug='+encodeURIComponent(active)+'&name=cast-sheet.png&t='+t:'');
+  const wrap=el('div',{class:'caststrip '+(isDefault?'warn':'ok')});
+  const th=el('div',{class:'cstthumb'}); if(src)th.append(el('img',{src,alt:'cast'})); wrap.append(th);
+  const mid=el('div',{style:'flex:1;min-width:0'});
+  const head=el('div',{class:'row',style:'margin:0;gap:8px;align-items:baseline'});
+  head.append(el('b',{},'🎭 Cast: '+xesc(title)+(count!=null?(' · '+count+' character'+(count===1?'':'s')):'')));
+  if(adapted)head.append(el('span',{class:'est',style:'color:var(--accent);font-weight:700'},'· reskinned for this episode'));
+  mid.append(head);
+  mid.append(el('div',{class:'est'}, isDefault
+    ? '⚠ Using the channel DEFAULT cast. If this video is about a different people, species, or era, pick or create the right sheet now — it flows into the thumbnail and every scene.'
+    : 'Everything generated from here — thumbnail art and every scene — uses this sheet. Looks wrong? Change it before generating.'));
+  wrap.append(mid);
+  wrap.append(el('button',{class:'btn sm'+(isDefault?' accent':''),onclick:openCast}, isDefault?'Pick a sheet':'Change'));
+  return wrap;
+}
+// Block silently generating art on the default cast: confirm, or bounce to the sheet picker.
+function castGuard(actionLabel){
+  if(sheetInfo&&(sheetInfo.active==='__default')){
+    const ok=confirm('This video is set to the channel DEFAULT cast (Max / Luna / Zed / Nova).\n\n'+actionLabel+' with the default cast?\n\nOK = go ahead with the default cast.\nCancel = stop and pick a different character sheet first.');
+    // A cancelled confirm used to abort SILENTLY (just opened the cast picker) — which read as "nothing
+    // happened / it's broken". Make it explicit so a click never silently does nothing.
+    if(!ok){ showToast('⏸ '+actionLabel+' did NOT start — you cancelled the cast prompt. Pick a sheet, or click again and choose OK to use the default cast.',6500); openCast(); return false; }
+  }
+  return true;
+}
+/* ---------- CAPTION STYLE: per-channel caption look (font/color/case/treatment). Drives the render
+   AND restyles every scene-card .capov overlay live so the preview matches the output. ---------- */
+let capStyle=null, capFonts=[];
+const CAP_FAM={gloria:'Gloria',marker:'Marker',patrick:'Patrick',kalam:'Kalam',bangers:'Bangers',archivo:'Archivo Black'};
+async function loadCapStyle(){
+  try{ const j=await(await fetch('/api/caption-style?channel='+encodeURIComponent(CH))).json(); capStyle=j.style; capFonts=j.fonts||[]; applyCapStyleCss(); }catch(_){}
+}
+function applyCapStyleCss(){
+  if(!capStyle)return; const cs=capStyle; const fam=CAP_FAM[cs.font]||'Gloria';
+  const tc=cs.case==='upper'?'uppercase':(cs.case==='lower'||cs.case==='sentence')?'lowercase':'none';
+  let shadow='0 0 5px rgba(10,7,4,.85),0 2px 8px rgba(0,0,0,.6)',stroke='0',bg='transparent',pad='2px 8px',radius='0';
+  if(cs.treatment==='outline'){stroke='1px';shadow='0 2px 9px rgba(0,0,0,.6)';}
+  else if(cs.treatment==='plate'){bg='rgba(18,14,10,.84)';pad='3px 14px 5px';radius='12px';shadow='none';}
+  let css='';
+  for(const k of Object.keys(CAP_FAM)) css+='@font-face{font-family:"'+CAP_FAM[k]+'";src:url(/api/font?name='+k+')}';
+  css+='.capov{font-family:"'+fam+'",cursive!important;font-weight:400!important;color:'+cs.color+'!important;'
+    +'text-transform:'+tc+'!important;-webkit-text-stroke:'+stroke+' rgba(10,7,4,.6);text-shadow:'+shadow+'!important;'
+    +'background:'+bg+'!important;padding:'+pad+'!important;border-radius:'+radius+'!important}';
+  if(cs.case==='sentence')css+='.capov::first-letter{text-transform:uppercase}';
+  let st=document.getElementById('capdyn'); if(!st){st=document.createElement('style');st.id='capdyn';document.head.append(st);} st.textContent=css;
+}
+async function saveCapStyle(patch){
+  capStyle=Object.assign({},capStyle,patch); applyCapStyleCss();
+  try{ const j=await(await fetch('/api/caption-style?channel='+encodeURIComponent(CH),{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(capStyle)})).json(); if(j.style){capStyle=j.style;applyCapStyleCss();} setChip('saved','✓ saved'); }catch(_){ setChip('','⚠ save failed'); }
+}
+function captionStylePanel(){
+  const box=el('details',{class:'imgbar',style:'margin:2px 0 14px'});
+  box.append(el('summary',{style:'cursor:pointer;font-weight:800;font-size:14px'},'🎨 Caption style — font · color · look'));
+  const inner=el('div',{style:'padding-top:12px'});
+  if(!capStyle){ inner.append(el('div',{class:'est'},'Loading…')); box.append(inner); loadCapStyle().then(()=>{if(activeTab==='scenes')render();}); return box; }
+  const cs=capStyle;
+  const prev=el('div',{style:'position:relative;height:128px;border-radius:8px;overflow:hidden;margin-bottom:14px;background:linear-gradient(135deg,#3c4a54,#1d2730 55%,#4a382b)'});
+  prev.append(el('div',{class:'capov cap-top-center'},'Bigger brains than us'));
+  inner.append(prev);
+  const grid=el('div',{style:'display:grid;grid-template-columns:repeat(auto-fit,minmax(148px,1fr));gap:11px'});
+  const field=(label,ctrl)=>el('label',{style:'display:flex;flex-direction:column;gap:4px;font-size:11.5px;color:var(--muted)'},el('span',{},label),ctrl);
+  const fontSel=dropdown({value:cs.font,cls:'modalinp',options:(capFonts.length?capFonts:[{key:cs.font,label:cs.font}]).map(f=>({value:f.key,label:f.label})),onChange:v=>saveCapStyle({font:v})});
+  grid.append(field('Font',fontSel));
+  const caseSel=dropdown({value:cs.case,cls:'modalinp',options:[['sentence','Sentence case'],['upper','UPPERCASE'],['lower','lowercase'],['as-is','As written']].map(([v,l])=>({value:v,label:l})),onChange:v=>saveCapStyle({case:v})});
+  grid.append(field('Case',caseSel));
+  const trSel=dropdown({value:cs.treatment,cls:'modalinp',options:[['shadow','Soft shadow'],['outline','Thin outline'],['plate','Plate / box']].map(([v,l])=>({value:v,label:l})),onChange:v=>saveCapStyle({treatment:v})});
+  grid.append(field('Legibility',trSel));
+  const szLab=el('span',{},'Size · '+cs.size+'px (render)');
+  const sizeIn=el('input',{type:'range',min:'28',max:'96',value:String(cs.size),oninput:e=>{szLab.textContent='Size · '+e.target.value+'px (render)';saveCapStyle({size:+e.target.value});}});
+  grid.append(el('label',{style:'display:flex;flex-direction:column;gap:4px;font-size:11.5px;color:var(--muted)'},szLab,sizeIn));
+  grid.append(field('Text color',el('input',{type:'color',value:(cs.color||'#fffdf7').slice(0,7),style:'height:34px;width:100%;padding:2px',oninput:e=>saveCapStyle({color:e.target.value})})));
+  grid.append(field('Accent',el('input',{type:'color',value:(cs.accent||'#f0883c').slice(0,7),style:'height:34px;width:100%;padding:2px',oninput:e=>saveCapStyle({accent:e.target.value})})));
+  inner.append(grid);
+  inner.append(el('label',{style:'display:flex;align-items:center;gap:7px;margin-top:11px;font-size:12px;color:var(--muted)'},
+    el('input',{type:'checkbox',...(cs.tilt?{checked:'checked'}:{}),onchange:e=>saveCapStyle({tilt:e.target.checked})}),el('span',{},'Playful tilt (slight rotation, render only)')));
+  inner.append(el('div',{class:'est',style:'margin-top:9px'},'Applies to EVERY caption across this channel — the rough-cut render and these previews. Saves automatically.'));
+  box.append(inner); return box;
+}
+/* ---------- END CARD preview: the outro is auto-appended at render time (not a storyboard scene),
+   so render JUST it to a still here so the operator can see the watch-next cards on demand. ---------- */
+function endCardPanel(){
+  const box=el('div',{class:'imgbar',style:'margin:18px 0 4px'});
+  box.append(el('div',{class:'row',style:'margin-top:0'},el('b',{style:'flex:1'},'🎬 End card — plays after your last scene')));
+  box.append(el('div',{class:'est'},'NOT a storyboard scene — it’s auto-added to the last ~14s of the rough cut: “Thanks for watching” + Subscribe + up to TWO “Watch next” cards featuring your real produced videos (newest first). Render a still of it here to see it without assembling the whole video.'));
+  const st=el('div',{class:'est',style:'margin-top:6px'});
+  const imgWrap=el('div',{style:'margin-top:10px'});
+  const showImg=()=>{ imgWrap.innerHTML=''; const img=el('img',{src:'/api/endcard-img?channel='+encodeURIComponent(CH)+'&id='+encodeURIComponent(ID)+'&t='+Date.now(),style:'width:100%;max-width:760px;border-radius:10px;border:1px solid var(--line);display:block',onerror:function(){this.remove();}}); imgWrap.append(img); };
+  const btn=el('button',{class:'btn accent',onclick:async function(){
+    this.disabled=true; st.textContent='🎬 Rendering end-card still… (~30–50s)';
+    try{ const j=await(await fetch('/api/preview-endcard?channel='+encodeURIComponent(CH)+'&id='+encodeURIComponent(ID),{method:'POST'})).json();
+      if(j.ok){ st.textContent='✓ Updated.'; showImg(); } else st.textContent='⚠ '+(j.error||j.reply||'failed');
+    }catch(e){ st.textContent='⚠ '+e; } this.disabled=false;
+  }},'🎬 Preview end card');
+  box.append(el('div',{class:'row'},btn),st,imgWrap);
+  showImg();   // show an existing still if one was already rendered (onerror hides it if not)
+  return box;
+}
 /* ---------- per-video CAST ADAPTATION (reimagine the cast for this episode) ---------- */
 let castAdapting=false;
 function castAdaptBlock(){
   const box=el('div',{class:'imgbar',style:'margin-top:10px;border:1px solid var(--line);border-radius:12px;padding:12px'});
   const cast=(doc.castAdapt||{}); const adapted=!!cast.note;
   box.append(el('div',{class:'row',style:'margin-top:0'},
-    el('b',{style:'flex:1'},'🎭 Cast for THIS video'),
-    el('button',{class:'btn sm',onclick:openCast},'Pick / create a character sheet')));
-  box.append(el('div',{class:'est'},'Choose which character sheet this video uses (or upload / generate a new one) with the button above. The picked sheet flows into the script, every scene, and the thumbnail. Or quickly RESKIN the current cast for just this episode below:'));
+    el('b',{style:'flex:1'},'🎭 Reskin the cast — optional'),
+    el('button',{class:'btn sm',onclick:openCast},'Change sheet')));
+  box.append(el('div',{class:'est'},'You don’t need this — your active sheet (shown in the banner above) already flows into the script, every scene, and the thumbnail. Use this ONLY to quickly RESKIN the current cast for this one episode (e.g. “as Ice-Age Neanderthals — keep the clean heads, add shaggy fur capes”) without making a whole new sheet. Leave it blank to use the sheet as-is.'));
   if(adapted){
     const strip=el('div',{class:'row',style:'gap:8px;flex-wrap:wrap;margin-top:8px'}); const t=Date.now();
     strip.append(castThumb('cast-sheet.png','sheet',t));
@@ -2392,6 +3438,7 @@ async function genOneImage(n){
 }
 async function genImages(testOnly){
   if(imagesGenerating){showToast('⏳ Images already generating — hang tight.',3000);return;}
+  if(!testOnly&&!castGuard('Generate all scene images'))return;
   imagesGenerating=true; if(activeTab==='scenes')render();
   showToast(testOnly?'🖼️ Generating a test image…':'🖼️ Generating images… runs in the background (~minutes). Thumbnails appear as they finish.');
   startImagesPoll();
@@ -2401,7 +3448,7 @@ async function genImages(testOnly){
 }
 function startImagesPoll(){ stopImagesPoll(); let n=0;
   imagesPollTimer=setInterval(async()=>{ if(++n>180){stopImagesPoll();return;}
-    try{ const d2=await (await fetch('/api/video?channel='+encodeURIComponent(CH)+'&id='+encodeURIComponent(ID))).json(); doc=d2; if(activeTab==='scenes')render(); }catch(_){}
+    try{ const d2=await (await fetch('/api/video?channel='+encodeURIComponent(CH)+'&id='+encodeURIComponent(ID))).json(); adoptDoc(d2); if(activeTab==='scenes'&&!patchScenes())render(); }catch(_){}
   },5000);
 }
 function stopImagesPoll(){ if(imagesPollTimer){clearInterval(imagesPollTimer);imagesPollTimer=null;} }
@@ -2438,7 +3485,7 @@ async function genOneVoice(n){
 }
 function startNarrationPoll(){ stopNarrationPoll(); let n=0;
   narrationPollTimer=setInterval(async()=>{ if(++n>180){stopNarrationPoll();return;}
-    try{ const d2=await (await fetch('/api/video?channel='+encodeURIComponent(CH)+'&id='+encodeURIComponent(ID))).json(); doc=d2; if(activeTab==='scenes')render(); }catch(_){}
+    try{ const d2=await (await fetch('/api/video?channel='+encodeURIComponent(CH)+'&id='+encodeURIComponent(ID))).json(); adoptDoc(d2); if(activeTab==='scenes'&&!patchScenes())render(); }catch(_){}
   },5000);
 }
 function stopNarrationPoll(){ if(narrationPollTimer){clearInterval(narrationPollTimer);narrationPollTimer=null;} }
@@ -2465,8 +3512,7 @@ function narrationToolbar(scenes){
   bar.append(el('div',{class:'est'},'Narration: '+voiced+' / '+withNarr+' beats voiced · whole script ≈ '+credits.toLocaleString()+' credits ('+(flash?'½-rate model':'standard')+') of a 30k Starter month.'));
   if(voiced){const b=el('div',{class:'progbar'});b.append(el('i',{style:'width:'+Math.round(voiced/Math.max(1,withNarr)*100)+'%'}));bar.append(b);}
   const vid=el('input',{value:voiceId,placeholder:'ElevenLabs voice ID',title:'Paste any voice ID from your ElevenLabs library',style:'min-width:200px'});
-  const mod=el('select',{title:'TTS model'});
-  [['eleven_multilingual_v2','Multilingual v2 (best quality)'],['eleven_turbo_v2_5','Turbo v2.5 (½ credits)'],['eleven_flash_v2_5','Flash v2.5 (fastest, ½ credits)']].forEach(([v,l])=>mod.append(el('option',{value:v,...(v===voiceModel?{selected:'selected'}:{})},l)));
+  const mod=dropdown({value:voiceModel,title:'TTS model',options:[['eleven_multilingual_v2','Multilingual v2 (best quality)'],['eleven_turbo_v2_5','Turbo v2.5 (½ credits)'],['eleven_flash_v2_5','Flash v2.5 (fastest, ½ credits)']].map(([v,l])=>({value:v,label:l}))});
   bar.append(el('div',{class:'keyrow'},el('span',{class:'txtlab'},'Voice'),
     el('button',{class:'btn sm accent',onclick:openVoiceLab},'🎙 Browse & test voices'),
     vid,mod,el('button',{class:'btn sm',onclick:()=>saveVoice({voiceId:vid.value.trim(),model:mod.value})},'Save')));
@@ -2489,8 +3535,7 @@ function openVoiceLab(){
   const audio=el('audio',{controls:''});
   const now=el('span',{class:'vlnow'},'nothing playing');
   const line=el('textarea',{},'Sixty-five thousand years ago, someone pushed off from a beach, paddled past the last island they could see, and kept going — straight out into open ocean.');
-  const model=el('select',{title:'TTS model'});
-  [['eleven_multilingual_v2','Multilingual v2 (best quality)'],['eleven_turbo_v2_5','Turbo v2.5 (½ credits)'],['eleven_flash_v2_5','Flash v2.5 (fastest)'],['eleven_v3','v3 (most expressive)']].forEach(([v,l])=>model.append(el('option',{value:v,...(v===voiceModel?{selected:'selected'}:{})},l)));
+  const model=dropdown({value:voiceModel,title:'TTS model',options:[['eleven_multilingual_v2','Multilingual v2 (best quality)'],['eleven_turbo_v2_5','Turbo v2.5 (½ credits)'],['eleven_flash_v2_5','Flash v2.5 (fastest)'],['eleven_v3','v3 (most expressive)']].map(([v,l])=>({value:v,label:l}))});
   const stab=el('input',{type:'range',min:'0',max:'1',step:'0.05',value:'0.35'});
   const style=el('input',{type:'range',min:'0',max:'1',step:'0.05',value:'0.40'});
   const stabV=el('span',{class:'v'},'0.35'), styleV=el('span',{class:'v'},'0.40');
@@ -2531,8 +3576,8 @@ function openVoiceLab(){
     j.voices.forEach(v=>account.append(vcard(v))); markCur();
   }).catch(e=>{account.innerHTML='';account.append(el('div',{class:'vlloading'},'error: '+e));});
   const q=el('input',{type:'text',placeholder:'search a name or trait (e.g. James, calm, documentary)…'});
-  const gender=el('select',{},el('option',{value:''},'any gender'),el('option',{value:'male',selected:'selected'},'male'),el('option',{value:'female'},'female'));
-  const use=el('select',{},el('option',{value:'narrative_story',selected:'selected'},'narration'),el('option',{value:'informative_educational'},'educational'),el('option',{value:'conversational'},'conversational'),el('option',{value:''},'any use'));
+  const gender=dropdown({value:'male',options:[{value:'',label:'any gender'},{value:'male',label:'male'},{value:'female',label:'female'}]});
+  const use=dropdown({value:'narrative_story',options:[{value:'narrative_story',label:'narration'},{value:'informative_educational',label:'educational'},{value:'conversational',label:'conversational'},{value:'',label:'any use'}]});
   const lib=el('div',{class:'vlgrid'},el('div',{class:'vlloading'},'searching…'));
   function searchLib(){ lib.innerHTML='<div class="vlloading">searching…</div>'; const p=new URLSearchParams();
     if(q.value.trim())p.set('search',q.value.trim()); if(gender.value)p.set('gender',gender.value); if(use.value)p.set('use_case',use.value);
@@ -2654,6 +3699,13 @@ function imageToolbar(scenes){
   row.append(el('button',{class:'btn',onclick:()=>genImages(true)},made?'Re-render scene 1':'Test scene 1'));
   bar.append(row);
   bar.append(el('div',{class:'est',style:'margin-top:6px'},'Lock the cast once (per-character refs), then Generate. The full run skips images you already have — to redo one shot, use its 🔄 button below.'));
+  /* Veo motion clips — OFF by default (slow, pricey, needs Veo access + an identity call). Toggle reveals 🎬 Animate per beat. */
+  const veoRow=el('div',{class:'est',style:'margin-top:8px;display:flex;align-items:center;gap:8px;flex-wrap:wrap'});
+  veoRow.append(el('span',{},'🎬 Veo motion clips (animate a still into video on hero beats):'));
+  veoRow.append(el('button',{class:'btn sm'+(veoEnabled?' accent':''),title:'OFF by default — Veo is slow + pricey and needs Veo access on your Gemini key. Turning it on reveals a 🎬 Animate button on each beat.',onclick:async function(){
+    try{ const j=await(await fetch('/api/veo-enable',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({on:!veoEnabled})})).json();
+      if(j.ok){veoEnabled=!!j.veoEnabled;showToast('Veo animation '+(veoEnabled?'ON — a 🎬 Animate button now shows on each beat.':'off.'),3500);render();}
+    }catch(e){showToast('⚠ '+e,3000);} }}, veoEnabled?'On':'Off'));
   bar.append(castAdaptBlock());
   return bar;
 }
@@ -2669,7 +3721,7 @@ function musicToolbar(){
   if(!musicOpen)return bar;
   if(musicLoading||!musicLib){bar.append(el('div',{class:'est',style:'margin-top:8px'},'Loading tracks…'));return bar;}
   const tracks=musicLib.tracks||[];
-  if(!tracks.length){bar.append(el('div',{class:'est',style:'margin-top:8px'},'No tracks in History/_assets/music/_auditions/. Drop .mp3 files there (and optionally add them to library.json) to audition them.'));return bar;}
+  if(!tracks.length){bar.append(el('div',{class:'est',style:'margin-top:8px'},'No tracks in this channel’s _assets/music/_auditions/. Drop .mp3 files there (and optionally add them to library.json) to audition them.'));return bar;}
   const wrap=el('div',{class:'musicgrid'});
   wrap.addEventListener('play',(e)=>{wrap.querySelectorAll('audio').forEach(a=>{if(a!==e.target)a.pause();});},true); // one-at-a-time
   tracks.forEach(t=>{

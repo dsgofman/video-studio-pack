@@ -23,11 +23,13 @@ for (const [key, file] of [['logo', 'logo.png'], ['banner', 'banner.png']]) {
   if (fs.existsSync(src)) { fs.mkdirSync(dstDir, { recursive: true }); fs.copyFileSync(src, path.join(dstDir, file)); brand[key] = 'brand/' + file; }
 }
 
-// Mirror render.mjs: feature a REAL produced sibling video as watch-next so the preview shows that zone.
-function pickWatchNext() {
+try { Object.assign(brand, JSON.parse(fs.readFileSync(path.join(srcDir, 'brand.json'), 'utf8'))); } catch (_) {}
+
+// Mirror render.mjs: feature up to TWO real produced sibling videos (newest first) in the watch-next zone.
+function pickWatchNext(limit = 2) {
   const chDir = path.join(ROOT, channel);
-  let dirs = []; try { dirs = fs.readdirSync(chDir, { withFileTypes: true }); } catch (_) { return null; }
-  let best = null;
+  let dirs = []; try { dirs = fs.readdirSync(chDir, { withFileTypes: true }); } catch (_) { return []; }
+  const cands = [];
   for (const d of dirs) {
     if (!d.isDirectory() || d.name.startsWith('_') || d.name === id) continue;
     const f = path.join(chDir, d.name, 'studio.json'); if (!fs.existsSync(f)) continue;
@@ -37,23 +39,25 @@ function pickWatchNext() {
     const pk = (dd.stages || {}).packaging || {};
     const t = ((pk.candidates || {}).titles || []).find((x) => x.id === (pk.decision || {}).primaryTitle);
     const title = (t && t.text) || dd.workingTitle; if (!title) continue;
-    const when = String(dd.updatedAt || '');
-    if (!best || when > best.when) best = { title, id: d.name, when, thumbAbs: path.join(chDir, d.name, '00-packaging', 'thumbnails', 'final-1.png') };
+    cands.push({ title, id: d.name, when: String(dd.updatedAt || ''), thumbAbs: path.join(chDir, d.name, '00-packaging', 'thumbnails', 'final-1.png') });
   }
-  return best;
+  cands.sort((a, b) => b.when.localeCompare(a.when));
+  return cands.slice(0, limit).map((c, i) => {
+    const wn = { title: c.title, id: c.id };
+    if (fs.existsSync(c.thumbAbs)) { fs.mkdirSync(dstDir, { recursive: true }); fs.copyFileSync(c.thumbAbs, path.join(dstDir, 'watchnext-' + (i + 1) + '.png')); wn.thumb = 'brand/watchnext-' + (i + 1) + '.png'; }
+    return wn;
+  });
 }
 
 const fps = 30, secs = 14;
+let captionStyle; try { captionStyle = JSON.parse(fs.readFileSync(path.join(ROOT, channel, '_assets', 'caption-style.json'), 'utf8')); } catch (_) {}
 const props = {
-  fps, width: 1920, height: 1080,
+  fps, width: 1920, height: 1080, captionStyle,
   beats: [{ n: 0, images: [], audio: null, map: null, durationInFrames: 2, motion: 'static', caption: null }],
-  endCard: { seconds: secs, tagline: 'The human story, before history began.', ...brand },
+  endCard: { seconds: secs, ...brand },
 };
-const wn = pickWatchNext();
-if (wn) {
-  props.endCard.watchNext = { title: wn.title, id: wn.id };
-  if (fs.existsSync(wn.thumbAbs)) { fs.mkdirSync(dstDir, { recursive: true }); fs.copyFileSync(wn.thumbAbs, path.join(dstDir, 'watchnext.png')); props.endCard.watchNextThumb = 'brand/watchnext.png'; }
-}
+const wns = pickWatchNext(2);
+if (wns.length) props.endCard.watchNext = wns;
 
 const serveUrl = await bundle({ entryPoint: path.join(__dirname, 'src', 'index.jsx'), publicDir });
 const composition = await selectComposition({ serveUrl, id: 'video', inputProps: props });

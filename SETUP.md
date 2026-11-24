@@ -23,7 +23,7 @@ If you're Claude Code reading this to set the project up for the user, do this:
 4. **Never** print, commit, or paste real keys into chat. `_studio/.secrets.json` and any
    `_assets/youtube.json` are **local only**.
 5. When the doctor says **Ready**, start the server and tell the user to open http://localhost:4317.
-6. If the user wants their **own** channel/topic (not the example "History" one), follow
+6. If the user wants their **own** channel/topic (the starter ships one blank channel, `MyChannel/`), follow
    "Start your own channel" below — don't reuse the example channel's niche.
 
 ---
@@ -59,8 +59,9 @@ That's the only `npm install` needed.
 
 ## 3. Get your API keys
 
-You only **need two** to make full videos: **Gemini** (images) and **ElevenLabs** (narration).
-YouTube is optional (only for uploading from inside the Studio).
+You only **need two** to make full videos: **Gemini** (images, and — via the same key — caption
+translation + optional Veo motion clips) and **ElevenLabs** (narration). **Pexels** and **YouTube** are
+optional.
 
 ### Gemini — scene images & thumbnails (~$0.04/image, ~$3–4 per video)
 1. Go to **https://aistudio.google.com/apikey**, sign in with a Google account.
@@ -73,6 +74,19 @@ YouTube is optional (only for uploading from inside the Studio).
 2. Open your profile menu → **API Keys** → **Create** → copy the key.
 3. Put it in `_studio/.secrets.json` as `"elevenKey"`.
 4. Pick a narrator voice inside the Studio later (Scenes tab → voice picker).
+
+### Pexels *(optional — real-artifact photo cutaways)*
+Free, commercial-use, no attribution required. Used sparingly to show the *actual* thing (a real mummy,
+real cave art, a real site) as a "specimen plate" cutaway against the cartoon.
+1. Go to **https://www.pexels.com/api/**, sign in, copy your API key.
+2. Paste it when the Studio prompts on first use (Scenes tab → **📷 Real photo**), **or** put it in
+   `_studio/.secrets.json` as `"pexelsKey"`. Skip it and beats just stay illustrated.
+
+### Veo motion clips *(optional — OFF by default)*
+The Studio can turn a hero beat's still into a few seconds of real motion via **Google Veo** (image→video),
+which runs on your **existing Gemini key** — but the key needs **Veo access** (a separate, paid Gemini
+capability), and Veo is slow + pricey, so it's **off by default**. Turn it on only when you want it:
+Scenes tab → **🎬 Veo motion clips: Off/On**. Leave it off for normal production.
 
 ### YouTube *(optional — only if you want to upload from the Studio)*
 Follow **`_studio/CONNECT-YOUTUBE.md`** — it walks through creating a free Google Cloud OAuth app and
@@ -106,14 +120,13 @@ Run `node _studio/setup.mjs` anytime to re-check that everything's configured.
 
 ## 5. Start your own channel
 
-The example channel in `History/` ("Before Lore") is one worked example — you can keep it as a
-reference or delete it. To make **your own** channel for your own topic:
+The starter ships one blank channel, `MyChannel/`, already wired up (empty `_ideas.md`, a style-bible
+template, brand + music + cast-sheet folders with READMEs). To make it **yours**:
 
-1. Copy the blueprint into a new top-level folder named after your channel:
-   ```bash
-   mkdir "MyChannel" && cp _templates/new-channel-blueprint.md "MyChannel/channel.md"
-   ```
-2. Fill in `MyChannel/channel.md` (niche, voice, audience, title formulas, visual identity). Ask Claude
+1. Rename the folder to your channel's name (e.g. `SpaceFacts/`). A channel is any top-level folder
+   with a `channel.md`; for a second channel, copy `_templates/new-channel-blueprint.md` into a new
+   sibling folder as `channel.md`.
+2. Fill in `channel.md` (niche, voice, audience, title formulas, visual identity). Ask Claude
    to help — it reads `CLAUDE.md` (the global rules) + your `channel.md` before producing anything.
 3. In the Studio, pick your channel, hit **＋ New project**, and work the pipeline: idea → packaging
    (title + thumbnail) → script → scenes → assets → assemble → publish kit.
@@ -130,10 +143,10 @@ the monetization rules, and the production standards. Read it (or have Claude re
 To hand the system to another person **without** your keys or huge caches:
 
 ```bash
-# from the project root — makes studio-bundle.zip excluding secrets, deps, caches, and example content
+# from the project root — makes studio-bundle.zip excluding secrets, deps, and caches
 zip -r studio-bundle.zip . \
   -x "*/node_modules/*" "_studio/.secrets.json" "**/_assets/youtube.json" \
-     "_studio/render/.tmp/*" "_studio/usage.json" "History/*" "*.DS_Store"
+     "_studio/render/.tmp/*" "_studio/usage.json" "_studio/usage-events.jsonl" "*.DS_Store"
 ```
 
 The recipient unzips it, then follows this SETUP.md from step 1 (they run their **own**
